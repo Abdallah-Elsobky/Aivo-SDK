@@ -283,7 +283,7 @@ public class DefaultLoopContext(
         if (agentPath.contains(childId)) {
             throw DelegationCycleException(agentPath + childId)
         }
-        if (agentPath.size >= agent.limits.maxDelegationDepth) {
+        if (agentPath.size > agent.limits.maxDelegationDepth) {
             throw MaxDelegationDepthExceededException(agent.limits.maxDelegationDepth)
         }
 
@@ -348,7 +348,7 @@ public class DefaultLoopContext(
     }
 
     override fun finish(text: String, usage: Usage?): LoopOutcome.Completed {
-        val finalUsage = usage ?: accumulatedUsage
+        val finalUsage = accumulatedUsage ?: usage
         return LoopOutcome.Completed(text, finalUsage)
     }
 

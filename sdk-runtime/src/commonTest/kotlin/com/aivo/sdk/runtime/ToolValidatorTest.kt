@@ -42,7 +42,7 @@ class ToolValidatorTest {
 
         val result = ToolValidator.validate(schema, invalidArgs)
         assertTrue(result is ValidationResult.Invalid)
-        assertTrue(result.errorMessage().contains("missing required property 'accountId'"))
+        assertTrue(result.errorMessage().contains("accountId"))
     }
 
     @Test

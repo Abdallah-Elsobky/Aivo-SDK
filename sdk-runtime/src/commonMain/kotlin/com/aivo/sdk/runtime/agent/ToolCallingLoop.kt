@@ -25,7 +25,7 @@ public class ToolCallingLoop(
         while (true) {
             when (val turn = context.think()) {
                 is Turn.Text -> {
-                    return context.finish(turn.text, turn.usage)
+                    return context.finish(turn.text)
                 }
                 is Turn.Call -> {
                     consecutiveToolCalls++
@@ -39,8 +39,8 @@ public class ToolCallingLoop(
                     if (isDuplicate || consecutiveToolCalls >= maxConsecutiveToolCalls) {
                         val finalTurn = context.think(tools = ToolSelection.None)
                         return when (finalTurn) {
-                            is Turn.Text -> context.finish(finalTurn.text, finalTurn.usage)
-                            is Turn.Call -> context.finish("Completed tool executions.", finalTurn.usage)
+                            is Turn.Text -> context.finish(finalTurn.text)
+                            is Turn.Call -> context.finish("Completed tool executions.")
                         }
                     }
                 }

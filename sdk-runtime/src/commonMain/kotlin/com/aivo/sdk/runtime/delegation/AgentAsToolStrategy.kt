@@ -61,7 +61,7 @@ public class DelegatedAgentTool(
         }
 
         // 2. Depth check
-        if (currentAgentPath.size >= maxDepth) {
+        if (currentAgentPath.size > maxDepth) {
             throw MaxDelegationDepthExceededException(maxDepth)
         }
 

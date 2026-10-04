@@ -1,5 +1,6 @@
 package com.aivo.sdk.runtime.tool
 
+import com.aivo.sdk.core.error.AgentException
 import com.aivo.sdk.core.model.ToolCall
 import com.aivo.sdk.core.model.ToolFailureKind
 import com.aivo.sdk.core.model.ToolResult
@@ -98,6 +99,8 @@ public class ToolExecutor(
             } else {
                 throw e
             }
+        } catch (e: AgentException) {
+            throw e
         } catch (e: Throwable) {
             ToolResult.Failure(
                 kind = ToolFailureKind.EXECUTION_FAILED,
