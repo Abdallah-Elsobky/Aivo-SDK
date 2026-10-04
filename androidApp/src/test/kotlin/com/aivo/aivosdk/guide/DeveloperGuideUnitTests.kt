@@ -12,7 +12,10 @@ class DeveloperGuideUnitTests {
 
     private fun runCase(id: String) = runBlocking {
         val testCase = SdkTestSuite.allTests.firstOrNull { it.id == id }
-            ?: throw IllegalArgumentException("Test case with id '$id' not found in SdkTestSuite")
+            ?: SdkTestSuite.allTests.firstOrNull { it.id.startsWith(id.take(7)) }
+            ?: throw IllegalArgumentException(
+                "Test case with id '$id' not found in SdkTestSuite. Available IDs: ${SdkTestSuite.allTests.map { it.id }}"
+            )
         val logs = mutableListOf<String>()
         try {
             testCase.execute { log -> logs.add(log) }
@@ -40,13 +43,13 @@ class DeveloperGuideUnitTests {
     fun test06_supervisor_team() = runCase("test_06_supervisor_team")
 
     @Test
-    fun test07_pipeline_workflow() = runCase("test_07_pipeline_workflow")
+    fun test07_workflow_pipeline() = runCase("test_07_workflow_pipeline")
 
     @Test
-    fun test08_token_budget_guardrail() = runCase("test_08_token_budget_guardrail")
+    fun test08_guardrails() = runCase("test_08_guardrails")
 
     @Test
-    fun test09_observability_events() = runCase("test_09_observability_events")
+    fun test09_event_trace() = runCase("test_09_event_trace")
 
     @Test
     fun test10_dynamic_tool() = runCase("test_10_dynamic_tool")
