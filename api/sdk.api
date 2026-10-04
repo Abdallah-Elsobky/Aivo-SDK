@@ -1,0 +1,30 @@
+public abstract interface class com/aivo/sdk/AivoSdk {
+	public static final field Companion Lcom/aivo/sdk/AivoSdk$Companion;
+	public abstract fun chat (Lcom/aivo/sdk/core/model/ConversationId;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun llm (Ljava/lang/String;)Lcom/aivo/sdk/LlmClient;
+	public abstract fun stream (Lcom/aivo/sdk/core/model/ConversationId;Ljava/lang/String;)Lkotlinx/coroutines/flow/Flow;
+}
+
+public final class com/aivo/sdk/AivoSdk$Companion {
+	public final fun invoke (Lkotlin/jvm/functions/Function1;)Lcom/aivo/sdk/AivoSdk;
+}
+
+public final class com/aivo/sdk/AivoSdkBuilder {
+	public fun <init> ()V
+	public final fun agents (Lkotlin/jvm/functions/Function1;)V
+	public final fun build ()Lcom/aivo/sdk/AivoSdk;
+	public final fun memory (Lkotlin/jvm/functions/Function1;)V
+	public final fun observability (Lkotlin/jvm/functions/Function1;)V
+	public final fun providers (Lkotlin/jvm/functions/Function1;)V
+	public final fun resilience (Lkotlin/jvm/functions/Function1;)V
+	public final fun runtime (Lkotlin/jvm/functions/Function1;)V
+	public final fun security (Lkotlin/jvm/functions/Function1;)V
+	public final fun tools (Lkotlin/jvm/functions/Function1;)V
+}
+
+public abstract interface class com/aivo/sdk/LlmClient {
+	public abstract fun generate (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun generate (Ljava/util/List;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun stream (Ljava/lang/String;)Lkotlinx/coroutines/flow/Flow;
+	public abstract fun stream (Ljava/util/List;)Lkotlinx/coroutines/flow/Flow;
+}

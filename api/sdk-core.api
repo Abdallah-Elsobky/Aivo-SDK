@@ -1,0 +1,34 @@
+public final class com/aivo/sdk/core/model/ConversationId {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun getValue ()Ljava/lang/String;
+}
+
+public final class com/aivo/sdk/core/model/ProviderId {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun getValue ()Ljava/lang/String;
+}
+
+public final class com/aivo/sdk/core/model/ModelRef {
+	public static final field Companion Lcom/aivo/sdk/core/model/ModelRef$Companion;
+	public fun <init> (Lcom/aivo/sdk/core/model/ProviderId;Ljava/lang/String;)V
+	public final fun getModelId ()Ljava/lang/String;
+	public final fun getProviderId ()Lcom/aivo/sdk/core/model/ProviderId;
+}
+
+public abstract interface class com/aivo/sdk/core/port/LlmProvider {
+	public abstract fun generate (Lcom/aivo/sdk/core/model/LlmRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getCapabilities ()Lcom/aivo/sdk/core/model/ProviderCapabilities;
+	public abstract fun getId ()Lcom/aivo/sdk/core/model/ProviderId;
+	public abstract fun stream (Lcom/aivo/sdk/core/model/LlmRequest;)Lkotlinx/coroutines/flow/Flow;
+}
+
+public abstract interface class com/aivo/sdk/core/port/Tool {
+	public abstract fun execute (Lkotlinx/serialization/json/JsonObject;Lcom/aivo/sdk/core/model/ToolContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getSpec ()Lcom/aivo/sdk/core/model/ToolSpec;
+}
+
+public abstract interface class com/aivo/sdk/core/port/MemoryStore {
+	public abstract fun append (Lcom/aivo/sdk/core/model/ConversationId;Ljava/util/List;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun clear (Lcom/aivo/sdk/core/model/ConversationId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getHistory (Lcom/aivo/sdk/core/model/ConversationId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}

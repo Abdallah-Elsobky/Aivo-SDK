@@ -1,0 +1,26 @@
+# local.properties.example
+#
+# This file is a TEMPLATE for your local.properties file.
+# Copy it to local.properties and fill in your own values.
+# local.properties is excluded from version control (.gitignore).
+#
+# NEVER commit your actual local.properties file.
+
+# ── Android SDK ──────────────────────────────────────────────────────────────
+# sdk.dir=/path/to/your/Android/Sdk
+
+# ── API Keys (all optional — only fill in the providers you use) ─────────────
+
+# Google Gemini — https://ai.google.dev/
+# GEMINI_API_KEY=AIza...
+
+# OpenRouter — https://openrouter.ai/
+# OPENROUTER_API_KEY=sk-or-...
+
+# OpenAI or OpenAI-compatible endpoint
+# OPENAI_API_KEY=sk-...
+# OPENAI_BASE_URL=https://api.openai.com/v1
+
+# Ollama (local — no key required by default)
+# OLLAMA_BASE_URL=http://localhost:11434
+# OLLAMA_API_KEY=    (only needed for Ollama Cloud)

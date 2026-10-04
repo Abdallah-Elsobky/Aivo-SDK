@@ -3,7 +3,7 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20JVM%20%7C%20iOS-green.svg)](https://kotlinlang.org/docs/multiplatform.html)
-[![Maven Central](https://img.shields.io/maven-central/v/com.aivo/aivo-sdk.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/com.aivo/aivo-sdk)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.abdallah-elsobky/aivo-sdk.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.abdallah-elsobky/aivo-sdk)
 
 Aivo SDK lets you build and compose autonomous multi-agent AI systems that run across any LLM provider — Ollama, OpenRouter, OpenAI-compatible endpoints, and Google Gemini — with unified streaming, tool calling, memory management, and production guardrails.
 
@@ -69,7 +69,7 @@ dependencyResolutionManagement {
 ```kotlin
 // build.gradle.kts (app or module)
 dependencies {
-    implementation("com.aivo:aivo-sdk:1.0.0")
+    implementation("io.github.abdallah-elsobky:aivo-sdk:1.0.0")
 }
 ```
 
@@ -80,7 +80,7 @@ dependencies {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation("com.aivo:aivo-sdk:1.0.0")
+            implementation("io.github.abdallah-elsobky:aivo-sdk:1.0.0")
         }
     }
 }
@@ -345,4 +345,4 @@ defaultModel("custom:my-model")
 
 ## License
 
-Aivo SDK is open source software licensed under the [Apache 2.0 License](LICENSE)."# Aivo-SDK" 
+Aivo SDK is open source software licensed under the [Apache 2.0 License](LICENSE). 

@@ -1,0 +1,41 @@
+# Compiled files and build outputs
+*.iml
+.kotlin
+.gradle
+**/build/
+!src/**/build/
+
+# IDE files
+.idea
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
+!*.xcworkspace/contents.xcworkspacedata
+**/xcshareddata/WorkspaceSettings.xcsettings
+xcuserdata
+.DS_Store
+
+# macOS
+.DS_Store
+
+# Android
+captures
+.externalNativeBuild
+.cxx
+
+# Secrets & local configuration (NEVER commit these)
+# local.properties contains your SDK path, API keys, etc.
+local.properties
+*.keystore
+*.jks
+google-services.json
+GoogleService-Info.plist
+
+# Node (if any tooling uses it)
+node_modules/
+
+# Environment variable files
+.env
+.env.local
+.env.*.local
