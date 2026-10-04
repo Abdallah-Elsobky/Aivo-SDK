@@ -13,6 +13,12 @@ jobs:
     permissions:
       contents: read
       packages: write
+    env:
+      SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+      SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+      SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+      SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+      SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
 
     steps:
       - name: Checkout repository
@@ -24,6 +30,9 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
@@ -32,15 +41,11 @@ jobs:
 
       - name: Publish to Maven Local
         run: ./gradlew publishToMavenLocal --no-daemon
-        env:
-          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
-          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
 
       - name: Create Maven Central Bundle Zip
         run: ./gradlew bundleForMavenCentral --no-daemon
 
-      - name: Upload Bundle Artifact (for manual inspection or Central Portal upload)
+      - name: Upload Bundle Artifact (for manual backup / inspection)
         uses: actions/upload-artifact@v4
         with:
           name: aivo-sdk-maven-central-bundle
@@ -50,18 +55,8 @@ jobs:
       - name: Publish to Sonatype Central Repository
         if: env.SONATYPE_USERNAME != '' && env.SONATYPE_PASSWORD != ''
         run: ./gradlew publishAllPublicationsToSonatypeCentralRepository --no-daemon
-        env:
-          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
-          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
 
       - name: Publish to GitHub Packages
-        if: env.GITHUB_TOKEN != ''
         run: ./gradlew publishAllPublicationsToGitHubPackagesRepository --no-daemon
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
-          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
