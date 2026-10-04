@@ -39,6 +39,9 @@ jobs:
       - name: Verify build and run tests
         run: ./gradlew check --no-daemon -x test
 
+      - name: Assemble all artifacts
+        run: ./gradlew assemble --no-daemon
+
       - name: Publish to Maven Local
         run: ./gradlew publishToMavenLocal --no-daemon
 

@@ -1,5 +1,6 @@
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.api.publish.tasks.GenerateModuleMetadata
 import org.gradle.api.tasks.bundling.Zip
 import org.gradle.jvm.tasks.Jar
 import org.gradle.plugins.signing.SigningExtension
@@ -38,6 +39,12 @@ subprojects {
 
         val emptyJavadocJar = tasks.register<Jar>("javadocJar") {
             archiveClassifier.set("javadoc")
+        }
+
+        tasks.withType<GenerateModuleMetadata>().configureEach {
+            if (name.contains("Android", ignoreCase = true)) {
+                enabled = false
+            }
         }
 
         extensions.configure<PublishingExtension> {
