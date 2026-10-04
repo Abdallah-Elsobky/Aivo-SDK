@@ -190,10 +190,10 @@ public class AivoSdkBuilder {
 
         val agentList = mutableListOf<AgentDefinition>()
         fun collectAgent(a: AgentDefinition) {
-            if (agentList.none { it.id == a.id }) {
+            if (agentList.none { it === a }) {
                 agentList.add(a)
                 for (inlineTool in a.toolInstances) {
-                    if (rawTools.none { it.spec.name == inlineTool.spec.name }) {
+                    if (rawTools.none { it === inlineTool }) {
                         rawTools.add(inlineTool)
                     }
                 }
@@ -471,7 +471,7 @@ public class AivoSdkBuilder {
         }
 
         public fun register(tool: Tool) {
-            if (tools.none { it.spec.name == tool.spec.name }) {
+            if (tools.none { it === tool }) {
                 tools.add(tool)
             }
         }
@@ -503,7 +503,7 @@ public class AivoSdkBuilder {
         }
 
         public fun register(agent: AgentDefinition) {
-            if (agents.none { it.id == agent.id }) {
+            if (agents.none { it === agent }) {
                 agents.add(agent)
             }
         }
