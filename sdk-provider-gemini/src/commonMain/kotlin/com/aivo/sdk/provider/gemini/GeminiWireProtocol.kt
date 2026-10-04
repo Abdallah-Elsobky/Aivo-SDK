@@ -224,9 +224,25 @@ public class GeminiWireProtocol(
     }
 
     private fun parseResponse(root: JsonObject): LlmResponse {
-        val candidate = root["candidates"]?.jsonArray?.firstOrNull()?.jsonObject
-            ?: throw ProtocolException(ProviderId("gemini"), "Missing 'candidates' in Gemini response")
+        val candidatesArray = root["candidates"]?.jsonArray
+        val stepsArray = root["steps"]?.jsonArray
 
+        return when {
+            candidatesArray != null -> {
+                val candidate = candidatesArray.firstOrNull()?.jsonObject
+                    ?: throw ProtocolException(ProviderId("gemini"), "Missing 'candidates' in Gemini response")
+                parseCandidatesResponse(root, candidate)
+            }
+            stepsArray != null -> {
+                parseStepsResponse(root, stepsArray)
+            }
+            else -> {
+                throw ProtocolException(ProviderId("gemini"), "Missing 'candidates' or 'steps' in Gemini response")
+            }
+        }
+    }
+
+    private fun parseCandidatesResponse(root: JsonObject, candidate: JsonObject): LlmResponse {
         val rawFinish = candidate["finishReason"]?.jsonPrimitive?.content
         if (rawFinish == "SAFETY") {
             throw ContentFilteredException(ProviderId("gemini"), "Gemini response blocked by content safety filters.")
@@ -235,8 +251,8 @@ public class GeminiWireProtocol(
         val content = candidate["content"]?.jsonObject
         val parts = content?.get("parts")?.jsonArray ?: JsonArray(emptyList())
 
-        var textAccum = StringBuilder()
-        var reasoningAccum = StringBuilder()
+        val textAccum = StringBuilder()
+        val reasoningAccum = StringBuilder()
         var thoughtSignature: String? = null
         val toolCalls = mutableListOf<ToolCall>()
 
@@ -280,7 +296,7 @@ public class GeminiWireProtocol(
             )
         }
 
-        val interactionId = root["interactionId"]?.jsonPrimitive?.content
+        val interactionId = root["interactionId"]?.jsonPrimitive?.content ?: root["id"]?.jsonPrimitive?.content
         var metadata = ProviderMetadata.Empty
         if (interactionId != null) {
             metadata = metadata.with(KEY_INTERACTION_ID, JsonPrimitive(interactionId))
@@ -300,7 +316,105 @@ public class GeminiWireProtocol(
             ),
             finishReason = finishReason,
             usage = usage,
-            model = null,
+            model = root["model"]?.jsonPrimitive?.content,
+            responseId = interactionId,
+        )
+    }
+
+    private fun parseStepsResponse(root: JsonObject, steps: JsonArray): LlmResponse {
+        val textAccum = StringBuilder()
+        val reasoningAccum = StringBuilder()
+        var thoughtSignature: String? = null
+        val toolCalls = mutableListOf<ToolCall>()
+
+        for (stepElement in steps) {
+            val step = stepElement.jsonObject
+            val stepType = step["type"]?.jsonPrimitive?.content
+
+            when (stepType) {
+                "model_output" -> {
+                    val contentArr = step["content"]?.jsonArray
+                    if (contentArr != null) {
+                        for (item in contentArr) {
+                            val itemObj = item.jsonObject
+                            val text = itemObj["text"]?.jsonPrimitive?.content
+                            if (text != null) {
+                                textAccum.append(text)
+                            }
+                        }
+                    }
+                    val directText = step["text"]?.jsonPrimitive?.content
+                    if (directText != null) {
+                        textAccum.append(directText)
+                    }
+                }
+                "thought" -> {
+                    val sig = step["signature"]?.jsonPrimitive?.content
+                    if (sig != null) {
+                        thoughtSignature = sig
+                    }
+                    val text = step["text"]?.jsonPrimitive?.content
+                    if (text != null) {
+                        reasoningAccum.append(text)
+                    }
+                }
+                "function_call" -> {
+                    val id = step["id"]?.jsonPrimitive?.content ?: "gemini-call-${toolCalls.size}"
+                    val name = step["name"]?.jsonPrimitive?.content ?: ""
+                    val argsElement = step["arguments"]
+                    val argsObj = when {
+                        argsElement is JsonObject -> argsElement
+                        argsElement != null && argsElement is JsonPrimitive -> {
+                            runCatching { SdkJson.parseToJsonElement(argsElement.content).jsonObject }
+                                .getOrDefault(JsonObject(emptyMap()))
+                        }
+                        else -> JsonObject(emptyMap())
+                    }
+                    if (name.isNotEmpty()) {
+                        toolCalls.add(ToolCall(id = id, name = name, arguments = argsObj))
+                    }
+                }
+            }
+        }
+
+        val status = root["status"]?.jsonPrimitive?.content
+        val finishReason = when {
+            status == "requires_action" || toolCalls.isNotEmpty() -> FinishReason.TOOL_CALLS
+            status == "length" -> FinishReason.LENGTH
+            status == "safety" -> FinishReason.CONTENT_FILTER
+            else -> FinishReason.STOP
+        }
+
+        val usageObj = root["usage"]?.jsonObject
+        val usage = usageObj?.let {
+            Usage(
+                inputTokens = it["total_input_tokens"]?.jsonPrimitive?.int,
+                outputTokens = it["total_output_tokens"]?.jsonPrimitive?.int,
+                reasoningTokens = it["total_thought_tokens"]?.jsonPrimitive?.int,
+            )
+        }
+
+        val interactionId = root["id"]?.jsonPrimitive?.content ?: root["interactionId"]?.jsonPrimitive?.content
+        var metadata = ProviderMetadata.Empty
+        if (interactionId != null) {
+            metadata = metadata.with(KEY_INTERACTION_ID, JsonPrimitive(interactionId))
+        }
+        if (thoughtSignature != null) {
+            metadata = metadata.with(KEY_THOUGHT_SIGNATURE, JsonPrimitive(thoughtSignature))
+        }
+
+        val textParts = if (textAccum.isNotEmpty()) listOf(ContentPart.Text(textAccum.toString())) else emptyList()
+
+        return LlmResponse(
+            message = Message.Assistant(
+                parts = textParts,
+                toolCalls = toolCalls,
+                reasoning = reasoningAccum.takeIf { it.isNotEmpty() }?.toString(),
+                providerMetadata = metadata,
+            ),
+            finishReason = finishReason,
+            usage = usage,
+            model = root["model"]?.jsonPrimitive?.content,
             responseId = interactionId,
         )
     }
@@ -328,6 +442,7 @@ public class GeminiWireProtocol(
                         .getOrElse { return@collect }
 
                     val interactionId = root["interactionId"]?.jsonPrimitive?.content
+                        ?: root["id"]?.jsonPrimitive?.content
                     if (interactionId != null) finalInteractionId = interactionId
 
                     val usageObj = root["usageMetadata"]?.jsonObject
@@ -338,6 +453,36 @@ public class GeminiWireProtocol(
                             reasoningTokens = usageObj["thoughtsTokenCount"]?.jsonPrimitive?.int,
                             cachedInputTokens = usageObj["cachedContentTokenCount"]?.jsonPrimitive?.int,
                         )
+                    }
+                    val usageInteractions = root["usage"]?.jsonObject
+                    if (usageInteractions != null) {
+                        finalUsage = Usage(
+                            inputTokens = usageInteractions["total_input_tokens"]?.jsonPrimitive?.int,
+                            outputTokens = usageInteractions["total_output_tokens"]?.jsonPrimitive?.int,
+                            reasoningTokens = usageInteractions["total_thought_tokens"]?.jsonPrimitive?.int,
+                        )
+                    }
+
+                    val deltaObj = root["delta"]?.jsonObject
+                    if (deltaObj != null) {
+                        val text = deltaObj["text"]?.jsonPrimitive?.content
+                        val thought = deltaObj["thought"]?.jsonPrimitive?.content
+                        if (thought != null) {
+                            accumulatedReasoning.append(thought)
+                            thoughtSignature = thought
+                            emit(LlmStreamEvent.ReasoningDelta(thought))
+                        }
+                        if (text != null) {
+                            accumulatedText.append(text)
+                            emit(LlmStreamEvent.TextDelta(text))
+                        }
+                    }
+
+                    val status = root["status"]?.jsonPrimitive?.content
+                    if (status == "completed") {
+                        finalFinishReason = FinishReason.STOP
+                    } else if (status == "requires_action") {
+                        finalFinishReason = FinishReason.TOOL_CALLS
                     }
 
                     val candidate = root["candidates"]?.jsonArray?.firstOrNull()?.jsonObject

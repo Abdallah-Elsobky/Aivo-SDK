@@ -22,7 +22,7 @@ class GeminiProviderContractTest : LlmProviderContractTest() {
 
     override fun createProvider(): LlmProvider {
         val mockEngine = MockEngine { request ->
-            val isStream = request.url.encodedPath.contains("streamInteractions") ||
+            val isStream = request.url.encodedPath.contains("stream") ||
                 request.body.toByteArray().decodeToString().contains("\"stream\":true")
             val content = if (isStream) GeminiFixtures.SSE_STREAM else GeminiFixtures.PLAIN_RESPONSE
             val contentType = if (isStream) "text/event-stream" else "application/json"
