@@ -36,8 +36,8 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - name: Build & Publish to Maven Local
-        run: ./gradlew publishToMavenLocal bundleForMavenCentral
+      - name: Build & Publish to Maven Local & Central Bundle
+        run: ./gradlew publishAllPublicationsToCentralBundleRepository publishToMavenLocal bundleForMavenCentral
 
       - name: Upload Bundle Artifact (for manual backup / inspection)
         uses: actions/upload-artifact@v4

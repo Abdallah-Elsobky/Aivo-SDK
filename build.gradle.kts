@@ -37,8 +37,14 @@ subprojects {
         group = findProperty("GROUP")?.toString() ?: "io.github.abdallah-elsobky"
         version = findProperty("VERSION_NAME")?.toString() ?: "1.0.0"
 
+        val emptyJavadocJar = tasks.register<Jar>("javadocJar") {
+            archiveClassifier.set("javadoc")
+        }
+
         tasks.withType<GenerateModuleMetadata>().configureEach {
-            if (name.contains("Android", ignoreCase = true)) {
+            // Keep module metadata enabled for root multiplatform publication, but disable
+            // for target variants (JVM/Android/iOS) to avoid artifact-mutation mismatch checks.
+            if (!name.equals("generateMetadataFileForKotlinMultiplatformPublication", ignoreCase = true)) {
                 enabled = false
             }
         }
@@ -47,6 +53,11 @@ subprojects {
             publications.withType<MavenPublication>().configureEach {
                 if (project.name == "sdk") {
                     artifactId = if (artifactId == "sdk") "aivo-sdk" else artifactId.replaceFirst("sdk", "aivo-sdk")
+                }
+
+                // Maven Central strictly requires a javadoc JAR for JVM publications
+                if (name in setOf("jvm", "kotlinMultiplatform")) {
+                    artifact(emptyJavadocJar)
                 }
 
                 pom {
@@ -98,6 +109,10 @@ subprojects {
                             ?: providers.gradleProperty("gpr.key").orNull
                     }
                 }
+                maven {
+                    name = "CentralBundle"
+                    url = uri(rootProject.layout.buildDirectory.dir("central-bundle"))
+                }
             }
         }
 
@@ -125,18 +140,13 @@ subprojects {
     }
 }
 
-// Helper task: Bundles all published artifacts for manual upload to central.sonatype.com if needed
+// Helper task: Bundles all published artifacts for manual upload to central.sonatype.com with required checksums
 tasks.register<Zip>("bundleForMavenCentral") {
     group = "publishing"
-    description = "Zips all published Aivo SDK artifacts from mavenLocal for manual upload to central.sonatype.com"
+    description = "Zips all published Aivo SDK artifacts for manual upload to central.sonatype.com"
     destinationDirectory.set(layout.buildDirectory.dir("distributions"))
-    val bundleVersion = findProperty("VERSION_NAME")?.toString() ?: "1.0.0"
+    val bundleVersion = findProperty("VERSION_NAME")?.toString() ?: "1.0.1"
     archiveFileName.set("aivo-sdk-bundle-$bundleVersion.zip")
 
-    val groupPath = (findProperty("GROUP")?.toString() ?: "io.github.abdallah-elsobky").replace('.', '/')
-    val m2Dir = File(System.getProperty("user.home"), ".m2/repository/$groupPath")
-
-    from(m2Dir) {
-        into(groupPath)
-    }
+    from(layout.buildDirectory.dir("central-bundle"))
 }
