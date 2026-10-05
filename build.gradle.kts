@@ -56,7 +56,7 @@ subprojects {
                 }
 
                 // Maven Central strictly requires a javadoc JAR for JVM publications
-                if (name in setOf("jvm", "kotlinMultiplatform")) {
+                if (name == "jvm") {
                     artifact(emptyJavadocJar)
                 }
 
