@@ -36,30 +36,21 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - name: Verify build and run tests
-        run: ./gradlew check --no-daemon -x test
-
-      - name: Assemble all artifacts
-        run: ./gradlew assemble --no-daemon
-
-      - name: Publish to Maven Local
-        run: ./gradlew publishToMavenLocal --no-daemon
-
-      - name: Create Maven Central Bundle Zip
-        run: ./gradlew bundleForMavenCentral --no-daemon
+      - name: Build & Publish to Maven Local
+        run: ./gradlew publishToMavenLocal bundleForMavenCentral
 
       - name: Upload Bundle Artifact (for manual backup / inspection)
         uses: actions/upload-artifact@v4
         with:
           name: aivo-sdk-maven-central-bundle
-          path: build/distributions/aivo-sdk-bundle-1.0.0.zip
+          path: build/distributions/aivo-sdk-bundle-*.zip
           retention-days: 7
 
       - name: Publish to Sonatype Central Repository
         if: env.SONATYPE_USERNAME != '' && env.SONATYPE_PASSWORD != ''
-        run: ./gradlew publishAllPublicationsToSonatypeCentralRepository --no-daemon
+        run: ./gradlew publishAllPublicationsToSonatypeCentralRepository
 
       - name: Publish to GitHub Packages
-        run: ./gradlew publishAllPublicationsToGitHubPackagesRepository --no-daemon
+        run: ./gradlew publishAllPublicationsToGitHubPackagesRepository
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

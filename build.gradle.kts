@@ -130,7 +130,8 @@ tasks.register<Zip>("bundleForMavenCentral") {
     group = "publishing"
     description = "Zips all published Aivo SDK artifacts from mavenLocal for manual upload to central.sonatype.com"
     destinationDirectory.set(layout.buildDirectory.dir("distributions"))
-    archiveFileName.set("aivo-sdk-bundle-1.0.0.zip")
+    val bundleVersion = findProperty("VERSION_NAME")?.toString() ?: "1.0.0"
+    archiveFileName.set("aivo-sdk-bundle-$bundleVersion.zip")
 
     val groupPath = (findProperty("GROUP")?.toString() ?: "io.github.abdallah-elsobky").replace('.', '/')
     val m2Dir = File(System.getProperty("user.home"), ".m2/repository/$groupPath")
