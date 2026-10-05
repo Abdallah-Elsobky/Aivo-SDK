@@ -37,10 +37,6 @@ subprojects {
         group = findProperty("GROUP")?.toString() ?: "io.github.abdallah-elsobky"
         version = findProperty("VERSION_NAME")?.toString() ?: "1.0.0"
 
-        val emptyJavadocJar = tasks.register<Jar>("javadocJar") {
-            archiveClassifier.set("javadoc")
-        }
-
         tasks.withType<GenerateModuleMetadata>().configureEach {
             if (name.contains("Android", ignoreCase = true)) {
                 enabled = false
@@ -51,19 +47,6 @@ subprojects {
             publications.withType<MavenPublication>().configureEach {
                 if (project.name == "sdk") {
                     artifactId = if (artifactId == "sdk") "aivo-sdk" else artifactId.replaceFirst("sdk", "aivo-sdk")
-                }
-
-                // Sonatype/Maven Central requires a javadoc JAR for JVM, Android, and root KMP publications,
-                // but NOT for native targets (iOS, etc.) where attaching a jar corrupts the klib component artifacts.
-                val isNativePublication = name.startsWith("ios", ignoreCase = true) ||
-                    name.startsWith("watchos", ignoreCase = true) ||
-                    name.startsWith("tvos", ignoreCase = true) ||
-                    name.startsWith("macos", ignoreCase = true) ||
-                    name.startsWith("linux", ignoreCase = true) ||
-                    name.startsWith("mingw", ignoreCase = true)
-
-                if (!isNativePublication && artifacts.none { it.classifier == "javadoc" }) {
-                    artifact(emptyJavadocJar)
                 }
 
                 pom {
