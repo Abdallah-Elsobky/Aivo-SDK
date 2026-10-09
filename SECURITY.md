@@ -9,7 +9,7 @@ All authentication is handled at runtime via:
 - `local.properties` → `BuildConfig` on Android (excluded from VCS via `.gitignore`)
 - Runtime user input or a secure credentials store
 
-See [docs/DEVELOPER_GUIDE.md#2-security--api-key-best-practices](docs/DEVELOPER_GUIDE.md#2-security--api-key-best-practices) for the complete guide.
+See [docs/user-guide/01-getting-started.md#3-storing-api-keys-securely](docs/user-guide/01-getting-started.md#3-storing-api-keys-securely) and [docs/user-guide/08-resilience-and-security.md](docs/user-guide/08-resilience-and-security.md) for the complete guide.
 
 ## Reporting a Vulnerability
 

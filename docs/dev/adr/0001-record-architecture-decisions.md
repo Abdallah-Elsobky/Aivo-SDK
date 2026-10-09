@@ -8,7 +8,7 @@ Aivo SDK is a multiplatform Agentic AI SDK designed to run identically on JVM, A
 
 ## Decision
 We adopt Architecture Decision Records (ADRs) to document significant architectural choices.
-All ADRs will be stored in `docs/adr/` in Markdown format, numbered sequentially.
+All ADRs will be stored in `docs/dev/adr/` in Markdown format, numbered sequentially.
 
 ## Consequences
 - Every non-trivial architectural decision will be recorded, reviewable, and tracked in git.

@@ -17,4 +17,5 @@ Please format commit messages following the Conventional Commits specification:
 - `test: add contract test for gemini streaming`
 
 ## Architecture Decisions (ADR)
-When making significant design decisions or introducing new paradigms, create a new record in `docs/adr/`.
+When making significant design decisions or introducing new paradigms, create a new record in `docs/dev/adr/`.
+See the [SDK Developer & Contributor Guide](docs/dev/README.md) for full architectural guidelines, invariants, and testing practices.

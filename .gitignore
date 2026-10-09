@@ -39,3 +39,9 @@ node_modules/
 .env
 .env.local
 .env.*.local
+
+# Planning & AI agent scratch files
+.plan/
+*.log
+*.tmp
+.fleet/
