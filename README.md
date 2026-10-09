@@ -1,6 +1,16 @@
 <div align="center">
 
-<img src="https://img.shields.io/badge/Aivo_SDK-1.0.1-6C63FF?style=for-the-badge&logo=kotlin&logoColor=white" alt="Version"/>
+<a href="https://abdallah-elsobky.github.io/Aivo-SDK/" target="_blank" rel="noopener noreferrer">
+  <img src="docs/assets/img/aivo.jpg" alt="Aivo SDK Logo" width="140" style="border-radius: 28px; box-shadow: 0 8px 24px rgba(0,0,0,0.18);" />
+</a>
+
+<br/>
+<br/>
+
+<a href="https://abdallah-elsobky.github.io/Aivo-SDK/" target="_blank" rel="noopener noreferrer">
+  <img src="https://img.shields.io/badge/Interactive_Docs-Visit_Website-6C63FF?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Interactive Documentation"/>
+</a>
+<img src="https://img.shields.io/badge/Aivo_SDK-1.0.1-10B981?style=for-the-badge&logo=kotlin&logoColor=white" alt="Version"/>
 
 # 🤖 Aivo SDK
 
@@ -10,6 +20,7 @@ Build and ship autonomous AI agents — with streaming, tool calling, multi-agen
 
 <br/>
 
+<a href="https://abdallah-elsobky.github.io/Aivo-SDK/" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Live_Docs-abdallah--elsobky.github.io%2FAivo--SDK-6C63FF?style=flat-square&logo=googlechrome&logoColor=white" alt="Live Docs"/></a>
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.abdallah-elsobky/aivo-sdk.svg?label=Maven%20Central&style=flat-square&color=6C63FF)](https://central.sonatype.com/artifact/io.github.abdallah-elsobky/aivo-sdk)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](LICENSE)
 [![Kotlin](https://img.shields.io/badge/Kotlin-Multiplatform-orange?style=flat-square&logo=kotlin)](https://kotlinlang.org/docs/multiplatform.html)
@@ -18,14 +29,21 @@ Build and ship autonomous AI agents — with streaming, tool calling, multi-agen
 
 <br/>
 
-[**Quick Start**](#-quick-start) · [**Providers**](#-providers) · [**Agents**](#-agents) · [**Tools**](#%EF%B8%8F-tool-calling) · [**Streaming**](#-streaming) · [**Memory**](#-memory--context) · [**Samples**](#-samples)
+<a href="https://abdallah-elsobky.github.io/Aivo-SDK/" target="_blank" rel="noopener noreferrer"><strong>🌐 Interactive Docs & Configurator</strong></a> · [**Quick Start**](#-quick-start) · [**Providers**](#-providers) · [**Agents**](#-agents) · [**Tools**](#%EF%B8%8F-tool-calling) · [**Streaming**](#-streaming) · [**Memory**](#-memory--context) · [**Samples**](#-samples)
 
 </div>
 
 ---
 
+> ### 🌐 Interactive Web Documentation & Live Playground
+> Explore the full developer and contributor guide, live interactive code configurator, IDE-styled syntax highlighting, and visual architecture flowcharts at:
+> 👉 **<a href="https://abdallah-elsobky.github.io/Aivo-SDK/" target="_blank" rel="noopener noreferrer">https://abdallah-elsobky.github.io/Aivo-SDK/</a>** *(opens in a new tab)*
+
+---
+
 ## 📖 Table of Contents
 
+- [🌐 Interactive Documentation Website (Live Portal)](https://abdallah-elsobky.github.io/Aivo-SDK/)
 - [Why Aivo SDK?](#-why-aivo-sdk)
 - [Features at a Glance](#-features-at-a-glance)
 - [Architecture](#-architecture)

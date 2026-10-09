@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aivo SDK - Modern Multiplatform Agentic AI Framework</title>
+  <meta name="description"
+    content="Production-grade Kotlin Multiplatform SDK for building autonomous agentic AI applications with Ollama, Gemini, OpenRouter, and multi-agent teams on Android, iOS, and JVM.">
+  <meta name="keywords"
+    content="Kotlin, Multiplatform, KMP, Android, AI, LLM, Agentic AI, Ollama, Gemini, OpenRouter, Autonomous Agents, Jetpack Compose">
+  <meta property="og:title" content="Aivo SDK - Documentation">
+  <meta property="og:description"
+    content="Build resilient, autonomous, multi-agent AI applications on Android, iOS, and JVM.">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts: Inter, Plus Jakarta Sans, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap"
+    rel="stylesheet">
+
+  <link rel="icon" type="image/jpeg" href="./assets/img/aivo.jpg">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="./assets/css/docs.css">
+</head>
+
+<body>
+
+  <!-- Top Glass Navigation -->
+  <header class="top-nav">
+    <div class="nav-left">
+      <button id="menu-toggle" class="menu-toggle-btn" aria-label="Toggle navigation menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+
+      <a href="./index.html" class="brand-logo">
+        <img src="./assets/img/aivo.jpg" alt="Aivo SDK Logo" class="brand-logo-img">
+        <span>Aivo SDK</span>
+      </a>
+      <span class="version-badge">v1.0.1</span>
+
+      <!-- Audience Switcher -->
+      <div class="audience-tabs" role="tablist">
+        <button id="tab-user-guide" class="audience-tab active" role="tab" aria-selected="true">
+          <span>🚀</span> User Guide
+        </button>
+        <button id="tab-dev-guide" class="audience-tab" role="tab" aria-selected="false">
+          <span>🛠️</span> SDK Contributor
+        </button>
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <button id="search-trigger" class="search-btn" aria-label="Search documentation">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8" />
+          <path d="M21 21l-4.35-4.35" />
+        </svg>
+        <span>Search docs...</span>
+        <kbd>Ctrl K</kbd>
+      </button>
+
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle color theme">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+      </button>
+
+      <a href="https://github.com/Abdallah-Elsobky/Aivo-SDK" target="_blank" rel="noopener noreferrer"
+        class="github-link" title="GitHub Repository">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- Layout Container -->
+  <div class="layout-container">
+
+    <!-- Left Navigation Sidebar -->
+    <aside id="docs-sidebar" class="docs-sidebar">
+
+      <!-- User Guide Navigation -->
+      <div id="nav-user-guide">
+        <div class="sidebar-nav-group">
+          <div class="sidebar-heading">Getting Started</div>
+          <ul class="sidebar-links">
+            <li><a href="#getting-started" class="sidebar-link active"><span class="link-icon">📦</span> Installation &
+                Setup</a></li>
+            <li><a href="#interactive-playground" class="sidebar-link"><span class="link-icon">⚡</span> Code
+                Configurator</a></li>
+            <li><a href="#quick-start" class="sidebar-link"><span class="link-icon">🚀</span> Quick Start (3 Levels)</a>
+            </li>
+            <li><a href="#providers-models" class="sidebar-link"><span class="link-icon">🌐</span> Providers &
+                Models</a></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-nav-group">
+          <div class="sidebar-heading">Agentic Features</div>
+          <ul class="sidebar-links">
+            <li><a href="#tools-capabilities" class="sidebar-link"><span class="link-icon">🛠️</span> Creating Tools &
+                Safety</a></li>
+            <li><a href="#single-agents" class="sidebar-link"><span class="link-icon">🤖</span> Creating Single
+                Agents</a></li>
+            <li><a href="#multi-agent-teams" class="sidebar-link"><span class="link-icon">👥</span> Multi-Agent
+                Teams</a></li>
+            <li><a href="#streaming-ui" class="sidebar-link"><span class="link-icon">🌊</span> Streaming & Compose
+                UI</a></li>
+            <li><a href="#memory-context" class="sidebar-link"><span class="link-icon">🧠</span> Memory & Context</a>
+            </li>
+            <li><a href="#resilience-security" class="sidebar-link"><span class="link-icon">🛡️</span> Resilience &
+                Security</a></li>
+            <li><a href="#offline-testing" class="sidebar-link"><span class="link-icon">🧪</span> Offline Unit
+                Testing</a></li>
+            <li><a href="#custom-loops" class="sidebar-link"><span class="link-icon">🔄</span> Custom Loops & Roles</a>
+            </li>
+            <li><a href="#master-example" class="sidebar-link"><span class="link-icon">🌟</span> Full Master Example</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Dev Contributor Navigation -->
+      <div id="nav-dev-guide" style="display: none;">
+        <div class="sidebar-nav-group">
+          <div class="sidebar-heading">Core Architecture</div>
+          <ul class="sidebar-links">
+            <li><a href="#architecture-layers" class="sidebar-link active"><span class="link-icon">🏛️</span> 4-Layer
+                Architecture</a></li>
+            <li><a href="#file-inventory" class="sidebar-link"><span class="link-icon">🗂️</span> File Inventory &
+                Invariants</a></li>
+            <li><a href="#execution-flows" class="sidebar-link"><span class="link-icon">🔄</span> Execution
+                Lifecycles</a></li>
+            <li><a href="#extending-sdk" class="sidebar-link"><span class="link-icon">🧩</span> Adding Providers</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="sidebar-nav-group">
+          <div class="sidebar-heading">Quality & Maintenance</div>
+          <ul class="sidebar-links">
+            <li><a href="#adrs" class="sidebar-link"><span class="link-icon">📜</span> Architecture Records (ADRs)</a>
+            </li>
+            <li><a href="#troubleshooting-playbook" class="sidebar-link"><span class="link-icon">🧰</span> Debugging
+                Playbook</a></li>
+            <li><a href="#contributing-guide" class="sidebar-link"><span class="link-icon">🤝</span> Contributing
+                Guidelines</a></li>
+          </ul>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="docs-main">
+
+      <!-- Hero Banner -->
+      <section class="hero-banner">
+        <div class="hero-banner-content">
+          <div>
+            <div class="hero-tagline">Kotlin Multiplatform AI Framework</div>
+            <h1 class="hero-title">Build Resilient Agentic AI Applications</h1>
+            <p class="hero-description">
+              Aivo SDK brings autonomous reasoning, multi-agent collaboration, reactive Jetpack Compose streaming, and
+              robust human confirmation gates to Android, iOS, and JVM.
+            </p>
+            <div class="hero-actions">
+              <a href="#interactive-playground" class="btn-primary">Try Interactive Configurator</a>
+              <a href="#getting-started" class="btn-secondary">Explore User Guide</a>
+            </div>
+          </div>
+          <div class="hero-logo-card">
+            <img src="./assets/img/aivo.jpg" alt="Aivo SDK Logo" class="hero-logo-img">
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           USER GUIDE CONTENT
+           =================================================================== -->
+      <div class="audience-user">
+
+        <!-- 1. Installation & Setup -->
+        <section id="getting-started" class="doc-section">
+          <h2><span>📦</span> Step-by-Step Installation & Setup</h2>
+          <p>
+            Aivo SDK is built natively for <strong>Kotlin Multiplatform (KMP)</strong> and can be integrated into
+            Android applications, KMP shared modules, iOS applications, or server-side JVM runtimes (e.g., Ktor, Spring
+            Boot).
+          </p>
+
+          <h3>Step 1: Configure Repositories</h3>
+          <p>In your root <code>settings.gradle.kts</code>, ensure <code>mavenCentral()</code> and <code>google()</code>
+            are declared:</p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span
+                style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">settings.gradle.kts</span>
+              <button class="copy-btn" data-target="code-settings">Copy</button>
+            </div>
+            <pre><code id="code-settings" class="language-groovy">dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}</code></pre>
+          </div>
+
+          <h3>Step 2: Add Dependencies</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <div class="code-tabs">
+                <button class="code-tab active" data-pane="gradle-android">Android App</button>
+                <button class="code-tab" data-pane="gradle-kmp">KMP Shared Module</button>
+                <button class="code-tab" data-pane="gradle-jvm">Desktop / Server JVM</button>
+              </div>
+              <button class="copy-btn" data-target="code-deps">Copy</button>
+            </div>
+            <pre><code id="code-deps" class="code-pane language-groovy">// Android app/build.gradle.kts
+dependencies {
+    // Aivo SDK Universal Multiplatform Engine
+    implementation("com.aivo:aivo-sdk:1.0.0")
+
+    // Kotlin Coroutines & JSON Serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+}</code></pre>
+          </div>
+
+          <h3>Step 3: Acquiring & Storing API Keys Securely</h3>
+          <p>
+            Before making calls, acquire your API credentials from your preferred provider:
+          </p>
+          <ul>
+            <li><strong>Ollama Cloud:</strong> Get your key from <a href="https://ollama.com" target="_blank"
+                rel="noopener noreferrer">ollama.com</a>. (Preconfigured Cloud Endpoint:
+              <code>https://ollama.com/api/chat</code>).</li>
+            <li><strong>Google Gemini:</strong> Generate a free API key at <a href="https://aistudio.google.com"
+                target="_blank" rel="noopener noreferrer">Google AI Studio</a>.</li>
+            <li><strong>OpenRouter:</strong> Generate an API key at <a href="https://openrouter.ai" target="_blank"
+                rel="noopener noreferrer">openrouter.ai</a> to access 200+ models.</li>
+          </ul>
+
+          <div class="callout callout-tip">
+            <div class="callout-icon">🔐</div>
+            <div class="callout-content">
+              <strong>Android Secret Storage Pattern:</strong> Never commit API keys to Git. Store your keys in
+              <code>local.properties</code> (which is ignored by <code>.gitignore</code>):
+              <br><code>OLLAMA_API_KEY=your_key_here</code>
+              <br><code>GEMINI_API_KEY=AIzaSy...</code>
+            </div>
+          </div>
+
+          <p>Then inject them into <code>BuildConfig</code> in <code>app/build.gradle.kts</code>:</p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span
+                style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">app/build.gradle.kts</span>
+              <button class="copy-btn" data-target="code-buildconfig">Copy</button>
+            </div>
+            <pre><code id="code-buildconfig" class="language-groovy">android {
+    defaultConfig {
+        val properties = java.util.Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            properties.load(localPropertiesFile.inputStream())
+        }
+        buildConfigField("String", "OLLAMA_API_KEY", "\"${properties.getProperty("OLLAMA_API_KEY", "")}\"")
+        buildConfigField("String", "GEMINI_API_KEY", "\"${properties.getProperty("GEMINI_API_KEY", "")}\"")
+    }
+    buildFeatures {
+        buildConfig = true
+    }
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- 2. Interactive Playground -->
+        <section id="interactive-playground" class="doc-section">
+          <h2><span>⚡</span> Interactive SDK Configurator</h2>
+          <p>
+            Choose your provider, model, and capabilities below to dynamically generate the exact Kotlin initialization
+            code for your project:
+          </p>
+
+          <div class="playground-box">
+            <div class="playground-header">
+              <div class="playground-title">
+                <span class="pulse-icon">⚡</span> Interactive Code Generator
+              </div>
+              <div class="playground-presets">
+                <span class="preset-label">1-Click Presets:</span>
+                <button type="button" class="preset-chip active" data-preset="quick-stream">🚀 Quick Stream</button>
+                <button type="button" class="preset-chip" data-preset="full-agent">🤖 Full Agent</button>
+                <button type="button" class="preset-chip" data-preset="safe-mutation">🛡️ Safe Mutation</button>
+              </div>
+              <span class="version-badge live-status-badge">
+                <span class="pulse-dot"></span> Live Compiler
+              </span>
+            </div>
+
+            <div class="playground-controls">
+              <!-- Provider Pills -->
+              <div class="control-item">
+                <label>Target LLM Provider</label>
+                <div class="provider-pill-group">
+                  <button type="button" class="provider-pill active" data-provider="ollama">
+                    <span class="pill-icon">🦙</span>
+                    <span class="pill-name">Ollama Cloud</span>
+                  </button>
+                  <button type="button" class="provider-pill" data-provider="gemini">
+                    <span class="pill-icon">♊</span>
+                    <span class="pill-name">Google Gemini</span>
+                  </button>
+                  <button type="button" class="provider-pill" data-provider="openrouter">
+                    <span class="pill-icon">🌐</span>
+                    <span class="pill-name">OpenRouter</span>
+                  </button>
+                </div>
+                <input type="hidden" id="pg-provider" value="ollama">
+              </div>
+
+              <!-- Model Selection -->
+              <div class="control-item">
+                <label for="pg-model">Strongly-Typed Model Catalog</label>
+                <div class="select-container">
+                  <select id="pg-model">
+                    <!-- Populated dynamically via docs.js -->
+                  </select>
+                  <svg class="select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+              </div>
+
+              <!-- Feature Capabilities with Modern Switch Chips -->
+              <div class="control-item full-width-control">
+                <label>Capabilities & Architecture Modules</label>
+                <div class="feature-switch-grid">
+                  <label class="switch-card" for="pg-tools">
+                    <input type="checkbox" id="pg-tools" checked>
+                    <span class="switch-indicator"></span>
+                    <div class="switch-meta">
+                      <span class="switch-title">🛠️ Custom Tools</span>
+                      <span class="switch-subtitle">Type-safe schema & execution</span>
+                    </div>
+                  </label>
+
+                  <label class="switch-card" for="pg-streaming">
+                    <input type="checkbox" id="pg-streaming" checked>
+                    <span class="switch-indicator"></span>
+                    <div class="switch-meta">
+                      <span class="switch-title">🌊 Compose Stream</span>
+                      <span class="switch-subtitle">Reactive Flow&lt;AgentEvent&gt;</span>
+                    </div>
+                  </label>
+
+                  <label class="switch-card" for="pg-memory">
+                    <input type="checkbox" id="pg-memory">
+                    <span class="switch-indicator"></span>
+                    <div class="switch-meta">
+                      <span class="switch-title">🧠 Persistent Memory</span>
+                      <span class="switch-subtitle">Sliding window & context</span>
+                    </div>
+                  </label>
+
+                  <label class="switch-card" for="pg-gate">
+                    <input type="checkbox" id="pg-gate">
+                    <span class="switch-indicator"></span>
+                    <div class="switch-meta">
+                      <span class="switch-title">🛡️ Safety Gate</span>
+                      <span class="switch-subtitle">Human confirmation pause</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Code Output Preview -->
+            <div class="code-block playground-code-block" style="margin-bottom: 0;">
+              <div class="code-header">
+                <div class="window-controls">
+                  <span class="window-dot dot-red"></span>
+                  <span class="window-dot dot-yellow"></span>
+                  <span class="window-dot dot-green"></span>
+                </div>
+                <div class="live-code-meta">
+                  <span class="meta-tag">Kotlin 2.0 DSL</span>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">LiveAivoConfig.kt</span>
+                </div>
+                <button class="copy-btn" data-target="pg-code-output">Copy Code</button>
+              </div>
+              <pre><code id="pg-code-output" class="language-kotlin">// Generating...</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Quick Start -->
+        <section id="quick-start" class="doc-section">
+          <h2><span>🚀</span> Quick Start: 3 Levels of DX</h2>
+          <p>
+            Aivo SDK adapts cleanly to your application requirements with three distinct levels of Developer Experience
+            (DX):
+          </p>
+
+          <div class="feature-grid">
+            <div class="feature-card">
+              <div class="feature-card-icon">1️⃣</div>
+              <div class="feature-card-title">Level 1: Raw LLM</div>
+              <div class="feature-card-desc">Zero orchestration overhead. Stream tokens directly or get single-turn
+                completions using strongly-typed models.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card-icon">2️⃣</div>
+              <div class="feature-card-title">Level 2: Autonomous Agent</div>
+              <div class="feature-card-desc">Single agent armed with type-safe tools, JSON schema validation, reasoning
+                loops, and human approval gates.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card-icon">3️⃣</div>
+              <div class="feature-card-title">Level 3: Multi-Agent Team</div>
+              <div class="feature-card-desc">Supervisor agent delegating tasks dynamically across specialized research,
+                writing, and analysis agents.</div>
+            </div>
+          </div>
+
+          <h3>Level 1: Raw LLM (Chat & Token Streaming)</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span
+                style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">RawLlmExample.kt</span>
+              <button class="copy-btn" data-target="code-raw-llm">Copy</button>
+            </div>
+            <pre><code id="code-raw-llm" class="language-kotlin">val aivo = AivoSdk.create(
+    provider = AivoProvider.OLLAMA,
+    model    = OllamaModel.GPT_OSS_120B.modelId,
+    apiKey   = BuildConfig.OLLAMA_API_KEY
+)
+
+// One-shot completion
+val response = aivo.chat("Explain coroutines in 2 sentences")
+println(response.text)
+
+// Token-by-token streaming Flow
+aivo.stream("Explain state machines")
+    .collect { event ->
+        if (event is AgentEvent.Delta) print(event.text)
+    }</code></pre>
+          </div>
+        </section>
+
+        <!-- 4. Providers & Models -->
+        <section id="providers-models" class="doc-section">
+          <h2><span>🌐</span> Providers & Strongly-Typed Model Catalogs</h2>
+          <p>
+            Say goodbye to magic strings and typos. Aivo SDK features typed model enums for all supported providers
+            while still supporting custom endpoints and custom private model identifiers:
+          </p>
+
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Provider</th>
+                  <th>Typed Catalog Enum</th>
+                  <th>Default Cloud Endpoint</th>
+                  <th>Custom Support</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Ollama Cloud</strong></td>
+                  <td>
+                    <code>OllamaModel.GPT_OSS_120B.modelId</code><br><code>OllamaModel.LLAMA_3_3_70B.modelId</code><br><code>OllamaModel.MISTRAL_SMALL_24B.modelId</code>
+                  </td>
+                  <td><code>https://ollama.com/api/chat</code><br><em>(predefined in SDK)</em></td>
+                  <td>✅ Yes (custom string ID & private base URL)</td>
+                </tr>
+                <tr>
+                  <td><strong>Google Gemini</strong></td>
+                  <td>
+                    <code>GeminiModel.GEMINI_2_5_FLASH.modelId</code><br><code>GeminiModel.GEMINI_2_5_PRO.modelId</code>
+                  </td>
+                  <td><code>/v1beta/interactions</code></td>
+                  <td>✅ Yes (custom model names)</td>
+                </tr>
+                <tr>
+                  <td><strong>OpenRouter</strong></td>
+                  <td>
+                    <code>OpenRouterModel.LING_3_0_FLASH_SANTE_FREE.modelId</code><br><code>OpenRouterModel.CLAUDE_3_5_SONNET.modelId</code>
+                  </td>
+                  <td><code>https://openrouter.ai/api/v1</code></td>
+                  <td>✅ Yes (all 200+ OpenRouter IDs)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Using Custom Endpoints or Private Cluster Models</h3>
+          <p>
+            Need to point to an on-premise Ollama cluster, vLLM instance, or fine-tuned company model? You can override
+            the base URL and pass any custom model string:
+          </p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span
+                style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">CustomProvider.kt</span>
+              <button class="copy-btn" data-target="code-custom-prov">Copy</button>
+            </div>
+            <pre><code id="code-custom-prov" class="language-kotlin">val aivo = AivoSdk {
+    providers {
+        ollama("private-cluster") {
+            // Optional: specify custom internal URL
+            baseUrl("https://internal-llm.company.com/api/chat")
+            apiKey(BuildConfig.CUSTOM_LLM_KEY)
+        }
+    }
+    // Pass custom fine-tuned model name as string
+    defaultModel("custom-llama3-fine-tuned:latest")
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- 5. Creating Tools & Capabilities -->
+        <section id="tools-capabilities" class="doc-section">
+          <h2><span>🛠️</span> Creating Tools & Safety Confirmation Gates</h2>
+          <p>
+            Tools empower your agents to take real-world actions: fetch weather APIs, query Room/SQLite databases,
+            trigger device sensors, or execute transactions.
+          </p>
+
+          <h3>Step 1: Anatomy of a Tool</h3>
+          <p>
+            Use the type-safe <code>tool("name", "description") { ... }</code> DSL to define tools with strict parameter
+            schemas:
+          </p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span
+                style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">WeatherTool.kt</span>
+              <button class="copy-btn" data-target="code-weather-tool">Copy</button>
+            </div>
+            <pre><code id="code-weather-tool" class="language-kotlin">val getWeatherTool = tool("get_weather", "Fetches live weather conditions for a given city") {
+    // 1. Declare JSON schema parameter constraints
+    parameters {
+        string("city", "The city name", required = true, minLength = 2)
+        string("unit", "Temperature unit", required = false, enum = listOf("celsius", "fahrenheit"))
+        boolean("forecast", "Include 3-day forecast", required = false)
+    }
+
+    // 2. Execute business logic with type-safe extractors
+    execute { args ->
+        val city = args.string("city")
+        val unit = args.stringOrNull("unit") ?: "celsius"
+        val isForecast = args.booleanOrNull("forecast") ?: false
+        
+        // Call your real backend or network service
+        """{"city": "$city", "temp": 24, "unit": "$unit", "condition": "Sunny"}"""
+    }
+}</code></pre>
+          </div>
+
+          <h3>Step 2: Safety & Human Confirmation Gates (High-Risk Tools)</h3>
+          <p>
+            When a tool performs sensitive mutations (e.g., spending money, deleting files, sending emails), you must
+            protect against autonomous hallucinations using <strong>Human Confirmation Gates</strong>:
+          </p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span
+                style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">TransferMoneyTool.kt</span>
+              <button class="copy-btn" data-target="code-transfer-tool">Copy</button>
+            </div>
+            <pre><code id="code-transfer-tool" class="language-kotlin">val transferFundsTool = tool("transfer_funds", "Transfers funds between bank accounts") {
+    riskLevel = RiskLevel.HIGH
+    requireConfirmation = true  // Runtime pauses and emits RequiresConfirmation event
+
+    parameters {
+        string("fromAccount", "Debiting account", required = true)
+        string("toAccount", "Crediting account", required = true)
+        double("amount", "Transfer amount in USD", required = true, minimum = 1.0)
+    }
+
+    execute { args ->
+        val from = args.string("fromAccount")
+        val to = args.string("toAccount")
+        val amount = args.double("amount")
+        bankApi.transfer(from, to, amount)
+        "Successfully transferred $$amount from $from to $to"
+    }
+}</code></pre>
+          </div>
+          <p>
+            When the LLM invokes this tool, the SDK execution loop pauses and emits
+            <code>AgentEvent.RequiresConfirmation</code> containing the tool name, arguments, and a unique
+            <code>toolCallId</code>. The app UI prompts the user (e.g. via biometric dialog), and then confirms or
+            rejects:
+          </p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span
+                style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">ConfirmationApproval.kt</span>
+              <button class="copy-btn" data-target="code-confirm-call">Copy</button>
+            </div>
+            <pre><code id="code-confirm-call" class="language-kotlin">// When user taps "Approve" in Compose Dialog:
+runtime.confirm(toolCallId = event.toolCallId, approved = true)
+
+// Or if user rejects:
+runtime.confirm(toolCallId = event.toolCallId, approved = false, reason = "User cancelled transfer")</code></pre>
+          </div>
+        </section>
+
+        <!-- 6. Creating Single Agents -->
+        <section id="single-agents" class="doc-section">
+          <h2><span>🤖</span> Creating Single Agents & Giving Them Tools</h2>
+          <p>
+            An <strong>Agent</strong> combines a persona/role, instructions (system prompt), scoped tools, and execution
+            limits.
+          </p>
+
+          <h3>Step 1: Programmatic Agent in Kotlin DSL</h3>
+          <p>
+            Register tools globally, then scope specific tools to your agent:
+          </p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span
+                style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">SingleAgentSetup.kt</span>
+              <button class="copy-btn" data-target="code-single-agent">Copy</button>
+            </div>
+            <pre><code id="code-single-agent" class="language-kotlin">val aivo = AivoSdk {
+    providers {
+        ollama(AivoProvider.OLLAMA.id) { apiKey(BuildConfig.OLLAMA_API_KEY) }
+    }
+    defaultModel(OllamaModel.GPT_OSS_120B)
+
+    // 1. Register available tools
+    tools {
+        +getWeatherTool
+        +transferFundsTool
+    }
+
+    // 2. Define the Agent and assign scoped tools
+    agents {
+        define("concierge") {
+            name = "Personal Concierge"
+            systemPrompt = """
+                You are a helpful mobile concierge.
+                Customer Name: {{user_name}}
+                Always check weather before suggesting outdoor activities.
+            """.trimIndent()
+            
+            // Give specific tools to this agent
+            tools("get_weather")
+            
+            // Set maximum execution turns to prevent infinite loops
+            maxSteps = 10
+        }
+    }
+    entryAgent("concierge")
+}
+
+// 3. Execute with dynamic prompt variables
+val response = aivo.chat(
+    message   = "What should I wear today in Cairo?",
+    variables = mapOf("user_name" to "Abdallah")
+)
+println(response.text)</code></pre>
+          </div>
+
+          <h3>Step 2: Declarative Agents (Markdown Frontmatter & JSON Catalogs)</h3>
+          <p>
+            To decouple prompt engineering from code updates, you can store agent definitions as Markdown files in your
+            assets:
+          </p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span
+                style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">assets/agents/support_agent.md</span>
+              <button class="copy-btn" data-target="code-md-agent">Copy</button>
+            </div>
+            <pre><code id="code-md-agent" class="language-markdown">---
+name: Support Specialist
+role: assistant
+provider: ollama
+model: gpt-oss-120b
+tools: [order_status, refund_tool]
+maxSteps: 8
+---
+You are a tier-1 customer support agent.
+Current customer: {{user_name}}.
+Always verify the order ID before processing any refund. Be courteous and concise.</code></pre>
+          </div>
+          <p>Load the Markdown catalog directly in Kotlin:</p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span
+                style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">LoadAgentFromCatalog.kt</span>
+              <button class="copy-btn" data-target="code-load-md">Copy</button>
+            </div>
+            <pre><code id="code-load-md" class="language-kotlin">val agentDef = AgentLoader.fromMarkdown(markdownFileContent)
+val runtime = AgentRuntime.create(agentDef) {
+    apiKey(BuildConfig.OLLAMA_API_KEY)
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- 7. Multi-Agent Teams & Orchestration -->
+        <section id="multi-agent-teams" class="doc-section">
+          <h2><span>👥</span> Creating Multi-Agent Teams & The Supervisor Pattern</h2>
+          <p>
+            Monolithic prompts struggle with complex multi-step workflows. Multi-agent teams solve this through
+            <strong>specialization of labor</strong>:
+          </p>
+
+          <div class="feature-grid">
+            <div class="feature-card">
+              <div class="feature-card-icon">👑</div>
+              <div class="feature-card-title">Supervisor Agent</div>
+              <div class="feature-card-desc">Coordinates incoming goals, plans sub-tasks, dispatches work to
+                specialists, and synthesizes the final response.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card-icon">🔎</div>
+              <div class="feature-card-title">Researcher Specialist</div>
+              <div class="feature-card-desc">Armed exclusively with search & database tools to gather factual insights
+                without hallucinating opinions.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card-icon">✍️</div>
+              <div class="feature-card-title">Writer Specialist</div>
+              <div class="feature-card-desc">Takes gathered research and writes structured, publication-grade markdown
+                reports without needing tool access.</div>
+            </div>
+          </div>
+
+          <h3>Full Multi-Agent Team Setup with Blackboard State</h3>
+          <p>
+            Agents share structured findings without string collisions using strongly-typed
+            <code>StateKey&lt;T&gt;</code>:
+          </p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span
+                style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">MultiAgentTeamExample.kt</span>
+              <button class="copy-btn" data-target="code-multi-agent">Copy</button>
+            </div>
+            <pre><code id="code-multi-agent" class="language-kotlin">// 1. Define strongly-typed shared keys for inter-agent communication
+object TeamKeys {
+    val ResearchFindings = StateKey.string("research_findings")
+    val DraftSummary = StateKey.string("draft_summary")
+}
+
+// 2. Build the Multi-Agent Team
+val marketReportTeam = team("MarketAnalysisTeam") {
+    
+    // Supervisor coordinates the workflow
+    supervisor {
+        name = "Lead Coordinator"
+        systemPrompt = "Analyze the user prompt. First delegate research to 'researcher'. Then delegate reporting to 'writer'."
+        model(AivoProvider.OLLAMA, OllamaModel.GPT_OSS_120B.modelId)
+    }
+
+    // Specialist 1: Researcher (has web search tool)
+    agent("researcher") {
+        name = "Market Researcher"
+        systemPrompt = "Extract key verified industry statistics and write notes into the blackboard."
+        tools("web_search")
+        model(AivoProvider.OLLAMA, OllamaModel.GPT_OSS_120B.modelId)
+    }
+
+    // Specialist 2: Writer (synthesizes findings)
+    agent("writer") {
+        name = "Executive Writer"
+        systemPrompt = "Read research findings and format a bulleted executive briefing."
+        model(AivoProvider.OLLAMA, OllamaModel.GPT_OSS_120B.modelId)
+    }
+}
+
+// 3. Execute the collaborative workflow
+val finalBriefing = marketReportTeam.execute("Analyze renewable energy battery storage growth in 2026")
+println(finalBriefing.text)</code></pre>
+          </div>
+        </section>
+
+        <!-- 8. Streaming & UI -->
+        <section id="streaming-ui" class="doc-section">
+          <h2><span>🌊</span> Reactive Streaming in Jetpack Compose & iOS</h2>
+          <p>
+            Provide instant feedback to users by streaming tokens as they generate, showing tool progress chips, and
+            handling confirmation dialogs.
+          </p>
+
+          <h3>1. Jetpack Compose ViewModel</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span
+                style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">ChatViewModel.kt</span>
+              <button class="copy-btn" data-target="code-compose-vm">Copy</button>
+            </div>
+            <pre><code id="code-compose-vm" class="language-kotlin">data class MessageUi(val sender: String, val text: String, val isToolExecuting: Boolean = false)
+
+class ChatViewModel(private val aivo: AivoSdk) : ViewModel() {
+    private val _messages = MutableStateFlow<List<MessageUi>>(emptyList())
+    val messages: StateFlow<List<MessageUi>> = _messages.asStateFlow()
+
+    // Confirmation gate state for UI Dialog
+    var pendingConfirmation by mutableStateOf<AgentEvent.RequiresConfirmation?>(null)
+        private set
+
+    fun sendMessage(prompt: String) {
+        _messages.update { it + MessageUi(sender = "User", text = prompt) }
+        _messages.update { it + MessageUi(sender = "Assistant", text = "") }
+
+        viewModelScope.launch {
+            aivo.stream(prompt).collect { event ->
+                when (event) {
+                    is AgentEvent.Delta -> {
+                        _messages.update { list ->
+                            val last = list.last()
+                            list.dropLast(1) + last.copy(text = last.text + event.text)
+                        }
+                    }
+                    is AgentEvent.ToolStarted -> {
+                        _messages.update { list ->
+                            val last = list.last()
+                            list.dropLast(1) + last.copy(isToolExecuting = true)
+                        }
+                    }
+                    is AgentEvent.ToolCompleted -> {
+                        _messages.update { list ->
+                            val last = list.last()
+                            list.dropLast(1) + last.copy(isToolExecuting = false)
+                        }
+                    }
+                    is AgentEvent.RequiresConfirmation -> {
+                        pendingConfirmation = event // Triggers Compose alert dialog
+                    }
+                    is AgentEvent.Completed -> { /* Stream finished */ }
+                    is AgentEvent.Error -> { /* Handle error */ }
+                    else -> Unit
+                }
+            }
+        }
+    }
+
+    fun handleConfirmation(approved: Boolean) {
+        val event = pendingConfirmation ?: return
+        aivo.confirm(event.toolCallId, approved)
+        pendingConfirmation = null
+    }
+}</code></pre>
+          </div>
+
+          <h3>2. Jetpack Compose UI Screen</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span
+                style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">ChatScreen.kt</span>
+              <button class="copy-btn" data-target="code-compose-ui">Copy</button>
+            </div>
+            <pre><code id="code-compose-ui" class="language-kotlin">@Composable
+fun ChatScreen(viewModel: ChatViewModel = viewModel()) {
+    val messages by viewModel.messages.collectAsState()
+    var input by remember { mutableStateOf("") }
+
+    // Human Confirmation Dialog Gate
+    viewModel.pendingConfirmation?.let { conf ->
+        AlertDialog(
+            onDismissRequest = { viewModel.handleConfirmation(false) },
+            title = { Text("Approve Action: ${conf.toolName}") },
+            text = { Text("Parameters: ${conf.arguments}") },
+            confirmButton = {
+                Button(onClick = { viewModel.handleConfirmation(true) }) { Text("Approve") }
+            },
+            dismissButton = {
+                OutlinedButton(onClick = { viewModel.handleConfirmation(false) }) { Text("Reject") }
+            }
+        )
+    }
+
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        LazyColumn(modifier = Modifier.weight(1f)) {
+            items(messages) { msg ->
+                ChatBubble(msg)
+            }
+        }
+        Row(modifier = Modifier.fillMaxWidth()) {
+            TextField(
+                value = input,
+                onValueChange = { input = it },
+                modifier = Modifier.weight(1f),
+                placeholder = { Text("Ask Aivo...") }
+            )
+            Button(onClick = { 
+                viewModel.sendMessage(input)
+                input = "" 
+            }) { Text("Send") }
+        }
+    }
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- 9. Memory & Context -->
+        <section id="memory-context" class="doc-section">
+          <h2><span>🧠</span> Persistent Memory & Context Strategies</h2>
+          <p>
+            Control how conversation history is persisted across mobile sessions and prevent model context limit
+            overflows:
+          </p>
+          <div class="feature-grid">
+            <div class="feature-card">
+              <div class="feature-card-title">Sliding Window</div>
+              <div class="feature-card-desc">Retains the most recent $N$ messages (e.g. <code>maxMessages = 20</code>)
+                while always preserving the system instructions.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card-title">Token Budget</div>
+              <div class="feature-card-desc">Estimates tokens backwards from newest to oldest until a threshold (e.g.
+                <code>maxTokens = 8_000</code>) is reached.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card-title">The Atomic Tool Pairing Invariant</div>
+              <div class="feature-card-desc">Tool calls and their corresponding execution results are grouped as atomic
+                units. They are never orphaned, preventing provider rejection errors.</div>
+            </div>
+          </div>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span
+                style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">MemorySetup.kt</span>
+              <button class="copy-btn" data-target="code-memory-setup">Copy</button>
+            </div>
+            <pre><code id="code-memory-setup" class="language-kotlin">val aivo = AivoSdk {
+    // ...
+    memory {
+        // Option A: In-memory sliding window
+        slidingWindow(maxMessages = 20)
+        
+        // Option B: Token budget with character heuristic
+        tokenBudget(maxTokens = 8_000, estimator = CharCountEstimator)
+    }
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- 10. Resilience & Security -->
+        <section id="resilience-security" class="doc-section">
+          <h2><span>🛡️</span> Resilience, Guardrails & Security</h2>
+          <p>
+            Production AI must be fortified against unstable connections, runaway execution costs, and data leaks:
+          </p>
+          <ul>
+            <li><strong>Exponential Backoff with Jitter:</strong> Automatically retries <code>429 Rate Limit</code> and
+              <code>503 Server Unavailable</code> errors with exponential delays (1s, 2s, 4s).</li>
+            <li><strong>Strict Execution Bounds:</strong> Every agent has a hard limit (e.g.
+              <code>maxSteps = 15</code>). If an agent exceeds this, it terminates cleanly instead of burning tokens
+              indefinitely.</li>
+            <li><strong>Secret Redaction Filter:</strong> Telemetry and logs automatically mask API keys, tokens, and
+              credit card numbers using regex sanitization before output.</li>
+            <li><strong>Concurrency Mutex:</strong> Memory store operations use Kotlin Coroutine Mutexes to guarantee
+              thread-safe state mutations across parallel agent turns.</li>
+          </ul>
+        </section>
+
+        <!-- 11. Offline Testing -->
+        <section id="offline-testing" class="doc-section">
+          <h2><span>🧪</span> Deterministic Offline Unit Testing</h2>
+          <p>
+            Unit-test your ViewModels, tools, and multi-agent loops deterministically without network calls and with
+            zero API token expense:
+          </p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span
+                style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">ChatViewModelTest.kt</span>
+              <button class="copy-btn" data-target="code-test">Copy</button>
+            </div>
+            <pre><code id="code-test" class="language-kotlin">@Test
+fun testViewModelStreamsDeltas() = runTest {
+    // Mock provider with deterministic streaming chunks
+    val fakeLlm = FakeLlmProvider().apply {
+        enqueueStreaming("Hello", " from", " Aivo!")
+    }
+
+    val viewModel = ChatViewModel(aivo = AivoSdk.createWithProvider(fakeLlm))
+    viewModel.sendMessage("Hi")
+
+    assertEquals("Hello from Aivo!", viewModel.messages.value.last().text)
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- 12. Custom Loops & Roles -->
+        <section id="custom-loops" class="doc-section">
+          <h2><span>🔄</span> Custom Reasoning Loops & Roles</h2>
+          <p>
+            Build specialized multi-agent architectures using the 3 core nouns: <strong>Agent</strong> (identity),
+            <strong>Tool</strong> (action), and <strong>Loop</strong> (algorithm):
+          </p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span
+                style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">CustomPipelineLoop.kt</span>
+              <button class="copy-btn" data-target="code-loop">Copy</button>
+            </div>
+            <pre><code id="code-loop" class="language-kotlin">// Type-safe roles and blackboard keys
+val analyst = AgentRole.ANALYST
+val ReviewNotesKey = StateKey.string("review_notes")
+
+// Sequential pipeline loop: Research -> Review -> Finalize
+val pipeline = SequenceLoop(
+    agents = listOf(researcherAgent, reviewerAgent, writerAgent),
+    state = BlackboardState()
+)
+
+val pipelineResult = pipeline.run("Analyze Q3 Financials")
+println(pipelineResult.finalOutput)</code></pre>
+          </div>
+        </section>
+
+        <!-- 13. Full Master Example -->
+        <section id="master-example" class="doc-section">
+          <h2><span>🌟</span> Full Master Example: All Features Together</h2>
+          <p>
+            Here is a complete, production-grade Android application setup demonstrating how <strong>Ollama
+              Cloud</strong>, <strong>Persistent Memory</strong>, <strong>Custom Tools</strong>, <strong>Human
+              Confirmation Gates</strong>, <strong>Multi-Agent Teams</strong>, and <strong>Jetpack Compose
+              Streaming</strong> work together harmoniously:
+          </p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span
+                style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">AivoMasterIntegration.kt</span>
+              <button class="copy-btn" data-target="code-master-sample">Copy</button>
+            </div>
+            <pre><code id="code-master-sample" class="language-kotlin">package com.example.aivo
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.aivo.sdk.AivoSdk
+import com.aivo.sdk.AivoProvider
+import com.aivo.sdk.core.model.*
+import com.aivo.sdk.provider.ollama.OllamaModel
+import com.aivo.sdk.runtime.tool.tool
+import com.aivo.sdk.runtime.agent.team
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+
+// 1. Define High-Risk Mutation Tool with Confirmation Gate
+val bookFlightTool = tool("book_flight", "Books a verified airline ticket") {
+    riskLevel = RiskLevel.HIGH
+    requireConfirmation = true
+
+    parameters {
+        string("destination", "3-letter airport code", required = true)
+        string("date", "Departure date YYYY-MM-DD", required = true)
+        double("maxPrice", "Maximum ticket price in USD", required = true)
+    }
+
+    execute { args ->
+        val dest = args.string("destination")
+        val date = args.string("date")
+        val price = args.double("maxPrice")
+        """{"status": "CONFIRMED", "ticket": "TK-9821", "dest": "$dest", "cost": $$price}"""
+    }
+}
+
+// 2. Define Multi-Agent Travel Team
+val travelTeam = team("TravelTeam") {
+    supervisor {
+        name = "Travel Concierge"
+        systemPrompt = "Deconstruct travel requests. Delegate flight booking to 'booking_agent'."
+        model(AivoProvider.OLLAMA, OllamaModel.GPT_OSS_120B.modelId)
+    }
+
+    agent("booking_agent") {
+        name = "Flight Booking Specialist"
+        systemPrompt = "Find flight availability and book tickets using 'book_flight'."
+        tools("book_flight")
+        model(AivoProvider.OLLAMA, OllamaModel.GPT_OSS_120B.modelId)
+        maxSteps = 6
+    }
+}
+
+// 3. Configure Aivo SDK with Cloud Provider and Sliding Window Memory
+val aivo = AivoSdk {
+    providers {
+        ollama(AivoProvider.OLLAMA.id) {
+            apiKey(BuildConfig.OLLAMA_API_KEY)
+        }
+    }
+    defaultModel(OllamaModel.GPT_OSS_120B)
+    
+    tools {
+        +bookFlightTool
+    }
+
+    memory {
+        slidingWindow(maxMessages = 20)
+    }
+}
+
+// 4. Reactive Jetpack Compose ViewModel
+class TravelViewModel : ViewModel() {
+    private val _messages = MutableStateFlow&lt;List&lt;String&gt;&gt;(emptyList())
+    val messages: StateFlow&lt;List&lt;String&gt;&gt; = _messages.asStateFlow()
+
+    private val _pendingGate = MutableStateFlow&lt;AgentEvent.RequiresConfirmation?&gt;(null)
+    val pendingGate: StateFlow&lt;AgentEvent.RequiresConfirmation?&gt; = _pendingGate.asStateFlow()
+
+    fun bookTrip(prompt: String) {
+        viewModelScope.launch {
+            aivo.stream(prompt).collect { event ->
+                when (event) {
+                    is AgentEvent.Delta -> {
+                        _messages.update { it + event.text }
+                    }
+                    is AgentEvent.RequiresConfirmation -> {
+                        // Triggers Biometric / Dialog Confirmation in Compose UI
+                        _pendingGate.value = event
+                    }
+                    is AgentEvent.Completed -> {
+                        println("Workflow finished! Usage: \${event.usage.totalTokens} tokens")
+                    }
+                    is AgentEvent.Error -> {
+                        println("Workflow error: \${event.error.message}")
+                    }
+                    else -> Unit
+                }
+            }
+        }
+    }
+
+    fun approveAction(approved: Boolean) {
+        val event = _pendingGate.value ?: return
+        aivo.confirm(event.toolCallId, approved)
+        _pendingGate.value = null
+    }
+}</code></pre>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ===================================================================
+           DEV / CONTRIBUTOR CONTENT
+           =================================================================== -->
+      <div class="audience-dev" style="display: none;">
+
+        <!-- 1. 4-Layer Architecture -->
+        <section id="architecture-layers" class="doc-section">
+          <h2><span>🏛️</span> 4-Layer Clean Architecture & Module Matrix</h2>
+          <p>
+            Aivo SDK strictly follows Clean Architecture and SOLID principles. The inward dependency rule ensures
+            <code>sdk-core</code> never references Ktor, HTTP, or JSON wire schemas:
+          </p>
+
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Layer</th>
+                  <th>Gradle Module</th>
+                  <th>Key Responsibilities</th>
+                  <th>Inward Dependencies</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Layer 1: Core Domain</strong></td>
+                  <td><code>sdk-core</code></td>
+                  <td>Domain models (<code>LlmRequest</code>, <code>Agent</code>, <code>Tool</code>), interfaces
+                    (<code>LlmProvider</code>, <code>MemoryStore</code>)</td>
+                  <td>Zero (pure Kotlin only)</td>
+                </tr>
+                <tr>
+                  <td><strong>Layer 2: Transport</strong></td>
+                  <td><code>sdk-transport</code></td>
+                  <td>Ktor HTTP client, custom <code>SseDecoder</code>, frame buffering, retry middleware</td>
+                  <td><code>sdk-core</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Layer 3: Providers</strong></td>
+                  <td><code>sdk-provider-*</code></td>
+                  <td>WireProtocols for Ollama, Gemini Interactions, OpenRouter, and OpenAI-compatible</td>
+                  <td><code>sdk-core</code>, <code>sdk-transport</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Layer 4: Runtime</strong></td>
+                  <td><code>sdk-runtime</code></td>
+                  <td>Reasoning loops, supervisor delegation, memory engines, telemetry</td>
+                  <td><code>sdk-core</code>, <code>sdk-middleware</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 2. File Inventory & Invariants -->
+        <section id="file-inventory" class="doc-section">
+          <h2><span>🗂️</span> File Inventory & Core Architectural Invariants</h2>
+          <p>
+            To maintain consistency across Android, iOS, and JVM targets, every contributor must uphold five
+            non-negotiable architectural invariants:
+          </p>
+
+          <div class="callout callout-info">
+            <div class="callout-icon">🔒</div>
+            <div class="callout-content">
+              <strong>Invariant #1 (Zero Reflection):</strong> No JVM reflection (<code>Class.forName</code>,
+              <code>java.lang.reflect</code>) is allowed in <code>commonMain</code> to ensure flawless compilation on
+              iOS Native.
+            </div>
+          </div>
+          <div class="callout callout-warning">
+            <div class="callout-icon">⚡</div>
+            <div class="callout-content">
+              <strong>Invariant #2 (Pure Core Domain):</strong> <code>sdk-core</code> must never import Ktor or JSON
+              wire serializer annotations. All HTTP transport concerns belong in <code>sdk-transport</code>.
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Execution Flows -->
+        <section id="execution-flows" class="doc-section">
+          <h2><span>🔄</span> Execution Lifecycles & Architecture Flowcharts</h2>
+          <p>
+            This section provides core contributors with an in-depth visual map of how requests, token streams, tool
+            executions, and multi-agent handoffs flow through the Aivo SDK engine.
+          </p>
+
+          <!-- Diagram 1: End-to-End Streaming Pipeline -->
+          <div class="architecture-diagram-card">
+            <div class="diagram-header">
+              <div class="diagram-title">
+                <span>🌊</span> Flow 1: End-to-End Reactive Streaming Pipeline
+              </div>
+              <span class="version-badge">Runtime Architecture</span>
+            </div>
+
+            <div class="flow-step-grid">
+              <div class="flow-node">
+                <span class="flow-node-badge">STEP 1 • CLIENT ENTRYPOINT</span>
+                <div class="flow-node-title">Client Calls aivo.stream(prompt)</div>
+                <div class="flow-node-desc">Android ViewModel or iOS Swift controller triggers reactive stream. Runtime
+                  allocates a coroutine scope and resolves conversation memory.</div>
+              </div>
+
+              <div class="flow-arrow-down">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M12 5v14M5 12l7 7 7-7" />
+                </svg>
+              </div>
+
+              <div class="flow-node">
+                <span class="flow-node-badge">STEP 2 • DOMAIN TO WIRE ENCODING</span>
+                <div class="flow-node-title">WireProtocol.encodeRequest(LlmRequest)</div>
+                <div class="flow-node-desc">The provider's WireProtocol transforms pure Kotlin domain models into
+                  provider-specific JSON payloads (e.g. Ollama <code>/api/chat</code> or Gemini
+                  <code>/v1beta/interactions</code>).</div>
+              </div>
+
+              <div class="flow-arrow-down">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M12 5v14M5 12l7 7 7-7" />
+                </svg>
+              </div>
+
+              <div class="flow-node">
+                <span class="flow-node-badge">STEP 3 • NETWORK & CUSTOM SSE DECODER</span>
+                <div class="flow-node-title">Ktor HttpClient POST & SseDecoder Line Buffer</div>
+                <div class="flow-node-desc">HTTP POST request streams byte chunks across Darwin/OkHttp engine.
+                  Zero-dependency <code>SseDecoder</code> handles CRLF normalization, strips comments, and buffers
+                  partial frames.</div>
+              </div>
+
+              <div class="flow-arrow-down">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M12 5v14M5 12l7 7 7-7" />
+                </svg>
+              </div>
+
+              <div class="flow-node">
+                <span class="flow-node-badge">STEP 4 • REACTIVE UI DISPATCH</span>
+                <div class="flow-node-title">Flow&lt;AgentEvent.Delta&gt; Emits to UI</div>
+                <div class="flow-node-desc">Parsed text tokens emit into Jetpack Compose <code>StateFlow</code> with
+                  sub-millisecond latency. Token usage metrics and stream completion emit upon closing.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Diagram 2: Tool Safety & Human Gate Pipeline -->
+          <div class="architecture-diagram-card">
+            <div class="diagram-header">
+              <div class="diagram-title">
+                <span>🛡️</span> Flow 2: Tool Execution & Safety Confirmation Gate
+              </div>
+              <span class="version-badge">Safety Guardrail</span>
+            </div>
+
+            <div class="flow-step-grid">
+              <div class="flow-node">
+                <span class="flow-node-badge">PHASE A • INVOCATION DETECTION</span>
+                <div class="flow-node-title">LLM Emits ToolCall(name, arguments)</div>
+                <div class="flow-node-desc">Model streams tool call token. Reasoning loop pauses token output and
+                  validates arguments against the registered JSON Schema parameters.</div>
+              </div>
+
+              <div class="flow-arrow-down">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M12 5v14M5 12l7 7 7-7" />
+                </svg>
+              </div>
+
+              <div class="flow-node">
+                <span class="flow-node-badge">PHASE B • RISK EVALUATION GATE</span>
+                <div class="flow-node-title">Risk Assessment & Human Approval Gate</div>
+                <div class="flow-node-desc">
+                  • <strong>Low Risk:</strong> Executes immediately in coroutine worker.<br>
+                  • <strong>High Risk / requireConfirmation:</strong> Emits
+                  <code>AgentEvent.RequiresConfirmation(toolCallId)</code> and suspends until client invokes
+                  <code>runtime.confirm()</code>.
+                </div>
+              </div>
+
+              <div class="flow-arrow-down">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M12 5v14M5 12l7 7 7-7" />
+                </svg>
+              </div>
+
+              <div class="flow-node">
+                <span class="flow-node-badge">PHASE C • ATOMIC MEMORY COMMIT</span>
+                <div class="flow-node-title">Atomic Tool Pairing Invariant Commit</div>
+                <div class="flow-node-desc">Tool result is formatted as <code>Message.Tool</code>. Assistant call and
+                  tool response are written atomically to memory under a Mutex lock to prevent orphaned message states.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Diagram 3: Multi-Agent Supervisor Loop -->
+          <div class="architecture-diagram-card">
+            <div class="diagram-header">
+              <div class="diagram-title">
+                <span>👑</span> Flow 3: Multi-Agent Supervisor & Blackboard State Loop
+              </div>
+              <span class="version-badge">Orchestration</span>
+            </div>
+
+            <div class="flow-step-grid">
+              <div class="flow-node">
+                <span class="flow-node-badge">STEP 1 • SUPERVISOR DECONSTRUCTION</span>
+                <div class="flow-node-title">Supervisor Receives User Goal & Plans Execution</div>
+                <div class="flow-node-desc">Supervisor agent analyzes inquiry complexity, checks current shared
+                  <code>BlackboardState</code>, and chooses the optimal specialist agent.</div>
+              </div>
+
+              <div class="flow-arrow-down">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M12 5v14M5 12l7 7 7-7" />
+                </svg>
+              </div>
+
+              <div class="flow-node">
+                <span class="flow-node-badge">STEP 2 • SPECIALIST WORKER EXECUTION</span>
+                <div class="flow-node-title">Specialist Agent Runs Scoped Capabilities</div>
+                <div class="flow-node-desc">Researcher agent executes search tools; findings are written directly to
+                  strongly-typed blackboard keys (e.g. <code>StateKey.string("findings")</code>).</div>
+              </div>
+
+              <div class="flow-arrow-down">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M12 5v14M5 12l7 7 7-7" />
+                </svg>
+              </div>
+
+              <div class="flow-node">
+                <span class="flow-node-badge">STEP 3 • SYNTHESIS & HANDOFF</span>
+                <div class="flow-node-title">Supervisor Review or Delegation to Next Specialist</div>
+                <div class="flow-node-desc">Supervisor evaluates output against maxSteps limit. If complete, synthesizes
+                  final executive brief and returns answer to user.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. Extending the SDK -->
+        <section id="extending-sdk" class="doc-section">
+          <h2><span>🧩</span> Extending the SDK: Adding Providers & WireProtocols</h2>
+          <p>
+            Adding support for a new model provider (e.g. Mistral or Anthropic) requires only implementing the
+            <code>WireProtocol</code> interface:
+          </p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span
+                style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">MistralWireProtocol.kt</span>
+              <button class="copy-btn" data-target="code-extend">Copy</button>
+            </div>
+            <pre><code id="code-extend" class="language-kotlin">class MistralWireProtocol : WireProtocol {
+    override fun encodeRequest(request: LlmRequest): HttpRequestPayload {
+        return HttpRequestPayload(
+            path = "/v1/chat/completions",
+            body = buildJsonPayload(request)
+        )
+    }
+
+    override fun decodeStreamFrame(frame: RawFrame): LlmStreamEvent? {
+        return when (frame) {
+            is RawFrame.Data -> parseDelta(frame.text)
+            is RawFrame.Done -> LlmStreamEvent.Completed
+        }
+    }
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- 5. ADRs -->
+        <section id="adrs" class="doc-section">
+          <h2><span>📜</span> Architecture Decision Records (ADRs)</h2>
+          <p>
+            Significant technical decisions are permanently tracked in <code>docs/dev/adr/</code>:
+          </p>
+
+          <div class="feature-grid">
+            <div class="feature-card">
+              <div class="feature-card-icon">📄</div>
+              <div class="feature-card-title">ADR 0001: ADR Adoption</div>
+              <div class="feature-card-desc">Adopted ADRs as the standard format for recording architectural trade-offs
+                across KMP targets.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card-icon">⚡</div>
+              <div class="feature-card-title">ADR 0002: SSE Decoder Over POST</div>
+              <div class="feature-card-desc">Built custom byte-line decoder to support POST streaming without relying on
+                Ktor's GET-only EventSource plugin.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card-icon">🤖</div>
+              <div class="feature-card-title">ADR 0003: Gemini Interactions API</div>
+              <div class="feature-card-desc">Encapsulated Gemini session states and thought tokens into
+                <code>ProviderMetadata</code> to keep domain models clean.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 6. Troubleshooting Playbook -->
+        <section id="troubleshooting-playbook" class="doc-section">
+          <h2><span>🧰</span> Debugging & Troubleshooting Playbook</h2>
+          <p>
+            Quick diagnostics for common issues encountered during development or integration:
+          </p>
+
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Symptom</th>
+                  <th>Root Cause</th>
+                  <th>Prescribed Diagnostic & Fix</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>HTTP 401 Unauthorized</code></td>
+                  <td>Missing or expired token</td>
+                  <td>Inspect <code>local.properties</code>; ensure <code>BuildConfig.OLLAMA_API_KEY</code> is injected.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>HTTP 429 Rate Limit</code></td>
+                  <td>Provider quota exceeded</td>
+                  <td>Configure <code>RetryPolicy.exponentialBackoff(maxRetries = 3, baseDelayMs = 1000)</code>.</td>
+                </tr>
+                <tr>
+                  <td><code>SSE Stream Drops Prematurely</code></td>
+                  <td>Aggressive timeout or line buffering split</td>
+                  <td>Ensure <code>SseDecoder</code> buffers partial lines; bump Ktor socket timeout to 60s.</td>
+                </tr>
+                <tr>
+                  <td><code>Tool Schema Rejection</code></td>
+                  <td>JSON parameter mismatch</td>
+                  <td>Verify parameter names declared in <code>parameters { }</code> match LLM output keys exactly.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 7. Contributing Guidelines -->
+        <section id="contributing-guide" class="doc-section">
+          <h2><span>🤝</span> Contributing Guidelines & Quality Bar</h2>
+          <p>
+            Help us build the most reliable agentic SDK in the Kotlin ecosystem. All pull requests must adhere to our
+            contribution principles:
+          </p>
+          <ul>
+            <li>Follow <strong>Conventional Commits</strong> (e.g. <code>feat: add mistral provider</code>,
+              <code>fix: sse crlf buffer split</code>).</li>
+            <li>Maintain <strong>Zero Reflection</strong> in <code>commonMain</code> for iOS Kotlin/Native
+              compatibility.</li>
+            <li>Write automated offline unit tests using <code>FakeLlmProvider</code> and <code>MockEngine</code>.</li>
+            <li>Update corresponding documentation in <code>docs/user-guide/</code> or <code>docs/dev/</code> for all
+              new public APIs.</li>
+          </ul>
+        </section>
+
+      </div>
+
+    </main>
+
+    <!-- Right Table of Contents -->
+    <aside class="docs-toc">
+      <div class="toc-title">On This Page</div>
+      <ul id="toc-list" class="toc-list">
+        <!-- Injected dynamically via docs.js -->
+      </ul>
+    </aside>
+
+  </div>
+
+  <!-- Command Palette / Search Modal -->
+  <div id="search-modal-backdrop" class="search-modal-backdrop">
+    <div class="search-modal">
+      <div class="search-input-wrapper">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8" />
+          <path d="M21 21l-4.35-4.35" />
+        </svg>
+        <input type="text" id="search-modal-input" class="search-modal-input"
+          placeholder="Type a command or search topic..." autocomplete="off">
+        <kbd
+          style="font-size: 0.75rem; padding: 0.2rem 0.5rem; background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: 4px; color: var(--text-dim);">ESC</kbd>
+      </div>
+      <ul id="search-results" class="search-results-list">
+        <!-- Results injected dynamically -->
+      </ul>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="docs-footer">
+    <p>
+      Aivo SDK Documentation • Licensed under <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank"
+        rel="noopener noreferrer">Apache 2.0</a> • Designed by <a href="https://github.com/Abdallah-Elsobky"
+        target="_blank" rel="noopener noreferrer">Abdallah Elsobky</a>
+    </p>
+  </footer>
+
+  <!-- Prism.js IDE Syntax Highlighting Core & Components -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-kotlin.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-groovy.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+
+  <script src="./assets/js/docs.js"></script>
+</body>
+
+</html>

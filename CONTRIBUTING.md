@@ -18,4 +18,4 @@ Please format commit messages following the Conventional Commits specification:
 
 ## Architecture Decisions (ADR)
 When making significant design decisions or introducing new paradigms, create a new record in `docs/dev/adr/`.
-See the [SDK Developer & Contributor Guide](docs/dev/README.md) for full architectural guidelines, invariants, and testing practices.
+See the [SDK Developer & Contributor Guide (Live Portal)](https://abdallah-elsobky.github.io/Aivo-SDK/) or local markdown files in `docs/dev/` for full architectural guidelines, invariants, and testing practices.
