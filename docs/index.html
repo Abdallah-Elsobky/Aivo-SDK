@@ -220,6 +220,9 @@
           </div>
 
           <h3>Step 2: Add Dependencies</h3>
+          <p>
+            Select your target architecture below to view the exact dependency configuration:
+          </p>
           <div class="code-block">
             <div class="code-header">
               <div class="window-controls">
@@ -229,20 +232,87 @@
               </div>
               <div class="code-tabs">
                 <button class="code-tab active" data-pane="gradle-android">Android App</button>
-                <button class="code-tab" data-pane="gradle-kmp">KMP Shared Module</button>
-                <button class="code-tab" data-pane="gradle-jvm">Desktop / Server JVM</button>
+                <button class="code-tab" data-pane="gradle-kmp-toml">KMP libs.versions.toml</button>
+                <button class="code-tab" data-pane="gradle-kmp">KMP shared/build.gradle.kts</button>
+                <button class="code-tab" data-pane="gradle-jvm">Server / Desktop JVM</button>
               </div>
-              <button class="copy-btn" data-target="code-deps">Copy</button>
+              <button class="copy-btn" data-target="gradle-android">Copy</button>
             </div>
-            <pre><code id="code-deps" class="code-pane language-groovy">// Android app/build.gradle.kts
+            <pre id="gradle-android" class="code-pane"><code class="language-groovy">// Android app/build.gradle.kts
 dependencies {
-    // Aivo SDK Universal Multiplatform Engine
-    implementation("com.aivo:aivo-sdk:1.0.0")
+    // Option A: Direct Maven coordinate (AGP resolves all submodules transitively)
+    implementation("io.github.abdallah-elsobky:aivo-sdk:1.0.1")
+
+    // Option B: Version Catalog (gradle/libs.versions.toml)
+    // implementation(libs.aivo.sdk)
 
     // Kotlin Coroutines & JSON Serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 }</code></pre>
+
+            <pre id="gradle-kmp-toml" class="code-pane" style="display: none;"><code class="language-toml"># gradle/libs.versions.toml
+[versions]
+aivo = "1.0.1"
+
+[libraries]
+aivo-sdk = { module = "io.github.abdallah-elsobky:aivo-sdk", version.ref = "aivo" }
+aivo-sdk-runtime = { module = "io.github.abdallah-elsobky:sdk-runtime", version.ref = "aivo" }
+aivo-sdk-core = { module = "io.github.abdallah-elsobky:sdk-core", version.ref = "aivo" }
+aivo-sdk-transport = { module = "io.github.abdallah-elsobky:sdk-transport", version.ref = "aivo" }
+aivo-sdk-middleware = { module = "io.github.abdallah-elsobky:sdk-middleware", version.ref = "aivo" }
+aivo-sdk-agent-config = { module = "io.github.abdallah-elsobky:sdk-agent-config", version.ref = "aivo" }
+aivo-sdk-provider-ollama = { module = "io.github.abdallah-elsobky:sdk-provider-ollama", version.ref = "aivo" }
+aivo-sdk-provider-gemini = { module = "io.github.abdallah-elsobky:sdk-provider-gemini", version.ref = "aivo" }
+aivo-sdk-provider-openai = { module = "io.github.abdallah-elsobky:sdk-provider-openai-compatible", version.ref = "aivo" }
+
+[bundles]
+aivo-sdk = [
+    "aivo-sdk",
+    "aivo-sdk-core",
+    "aivo-sdk-runtime",
+    "aivo-sdk-transport",
+    "aivo-sdk-middleware",
+    "aivo-sdk-agent-config",
+    "aivo-sdk-provider-ollama",
+    "aivo-sdk-provider-gemini",
+    "aivo-sdk-provider-openai"
+]</code></pre>
+
+            <pre id="gradle-kmp" class="code-pane" style="display: none;"><code class="language-groovy">// shared/build.gradle.kts (Kotlin Multiplatform)
+kotlin {
+    androidTarget()
+    iosArm64()
+    iosSimulatorArm64()
+    jvm()
+
+    sourceSets {
+        commonMain.dependencies {
+            // Complete Aivo SDK Multiplatform Bundle
+            implementation(libs.bundles.aivo.full)
+
+            // Optional: Coroutines & Serialization
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+        }
+    }
+}</code></pre>
+
+            <pre id="gradle-jvm" class="code-pane" style="display: none;"><code class="language-groovy">// build.gradle.kts (Desktop / Server JVM)
+dependencies {
+    implementation("io.github.abdallah-elsobky:aivo-sdk:1.0.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+}</code></pre>
+          </div>
+
+          <div class="callout callout-info" style="margin-top: 1rem;">
+            <div class="callout-icon">💡</div>
+            <div class="callout-content">
+              <strong>Why use the Version Catalog Bundle for KMP?</strong>
+              <p style="margin: 0.25rem 0 0 0; font-size: 0.88rem; color: var(--text-dim);">
+                In pure Android projects, Gradle's Android plugin automatically resolves POM compile dependencies transitively, allowing a single <code>implementation("io.github.abdallah-elsobky:aivo-sdk:1.0.1")</code> line. However, in <strong>Kotlin Multiplatform (KMP)</strong>, <code>commonMain</code> compiles multiplatform klibs for every target (Android, iOS, JVM). Declaring <code>libs.bundles.aivo.full</code> gives you a single clean line in your build script while guaranteeing complete symbol availability for all providers, agent engines (such as <code>AgentDefinition</code>), transport, and middleware across all platforms without classpath conflicts.
+              </p>
+            </div>
           </div>
 
           <h3>Step 3: Acquiring & Storing API Keys Securely</h3>
@@ -1662,6 +1732,7 @@ class TravelViewModel : ViewModel() {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-toml.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
 
   <script src="./assets/js/docs.js"></script>

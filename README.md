@@ -150,6 +150,8 @@ Aivo SDK is built on a strict **Hexagonal / Ports-and-Adapters Architecture** so
 
 ### Android (pure Android project)
 
+In pure Android projects, integration is simple — a single line in your build script gives you the complete Aivo SDK runtime, because the Android Gradle Plugin (AGP) automatically resolves transitive dependencies.
+
 **Step 1 — Add Maven Central** to your root `settings.gradle.kts`:
 
 ```kotlin
@@ -165,10 +167,26 @@ dependencyResolutionManagement {
 
 **Step 2 — Add the dependency** to your app module's `build.gradle.kts`:
 
+**Option A: Direct dependency**
 ```kotlin
 // app/build.gradle.kts
 dependencies {
     implementation("io.github.abdallah-elsobky:aivo-sdk:1.0.1")
+}
+```
+
+**Option B: Gradle Version Catalog (`gradle/libs.versions.toml`)**
+```toml
+[versions]
+aivo = "1.0.1"
+
+[libraries]
+aivo-sdk = { module = "io.github.abdallah-elsobky:aivo-sdk", version.ref = "aivo" }
+```
+```kotlin
+// app/build.gradle.kts
+dependencies {
+    implementation(libs.aivo.sdk)
 }
 ```
 
@@ -178,10 +196,43 @@ dependencies {
 
 ### Kotlin Multiplatform (KMP)
 
-Add the dependency to the `commonMain` source set in your KMP module:
+In Kotlin Multiplatform (KMP), `commonMain` compiles multiplatform metadata and target-specific klibs across Android, iOS, and JVM. To guarantee complete symbol and classpath resolution across all submodules (including `AgentDefinition`, providers, transport, and middleware), use the **Gradle Version Catalog bundle**.
+
+**Step 1 — Define the Bundle in `gradle/libs.versions.toml`**:
+
+```toml
+[versions]
+aivo = "1.0.1"
+
+[libraries]
+aivo-sdk = { module = "io.github.abdallah-elsobky:aivo-sdk", version.ref = "aivo" }
+aivo-sdk-runtime = { module = "io.github.abdallah-elsobky:sdk-runtime", version.ref = "aivo" }
+aivo-sdk-core = { module = "io.github.abdallah-elsobky:sdk-core", version.ref = "aivo" }
+aivo-sdk-transport = { module = "io.github.abdallah-elsobky:sdk-transport", version.ref = "aivo" }
+aivo-sdk-middleware = { module = "io.github.abdallah-elsobky:sdk-middleware", version.ref = "aivo" }
+aivo-sdk-agent-config = { module = "io.github.abdallah-elsobky:sdk-agent-config", version.ref = "aivo" }
+aivo-sdk-provider-ollama = { module = "io.github.abdallah-elsobky:sdk-provider-ollama", version.ref = "aivo" }
+aivo-sdk-provider-gemini = { module = "io.github.abdallah-elsobky:sdk-provider-gemini", version.ref = "aivo" }
+aivo-sdk-provider-openai = { module = "io.github.abdallah-elsobky:sdk-provider-openai-compatible", version.ref = "aivo" }
+
+[bundles]
+aivo-sdk = [
+    "aivo-sdk",
+    "aivo-sdk-core",
+    "aivo-sdk-runtime",
+    "aivo-sdk-transport",
+    "aivo-sdk-middleware",
+    "aivo-sdk-agent-config",
+    "aivo-sdk-provider-ollama",
+    "aivo-sdk-provider-gemini",
+    "aivo-sdk-provider-openai"
+]
+```
+
+**Step 2 — Add the Bundle to `commonMain` in your shared module's `build.gradle.kts`**:
 
 ```kotlin
-// shared/build.gradle.kts  (or any KMP module)
+// shared/build.gradle.kts (or any KMP module)
 kotlin {
     androidTarget()
     iosArm64()
@@ -190,13 +241,13 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation("io.github.abdallah-elsobky:aivo-sdk:1.0.1")
+            implementation(libs.bundles.aivo.full)
         }
     }
 }
 ```
 
-That's it — no platform-specific artifacts needed. One dependency covers Android, JVM, and iOS.
+> **Why the bundle?** In KMP, multiplatform klib compilation requires direct access to module metadata for each target in `commonMain`. Using `libs.bundles.aivo.full` provides a single clean line in your build script while guaranteeing complete symbol availability for all providers, agent engines, and configuration tools across Android, JVM, and iOS!
 
 ---
 

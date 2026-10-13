@@ -168,6 +168,10 @@ function initCodeTabs() {
         codeBlock.querySelectorAll('.code-pane').forEach(pane => {
           pane.style.display = (pane.id === targetId) ? 'block' : 'none';
         });
+        const copyBtn = codeBlock.querySelector('.copy-btn');
+        if (copyBtn && targetId) {
+          copyBtn.setAttribute('data-target', targetId);
+        }
       });
     });
   });

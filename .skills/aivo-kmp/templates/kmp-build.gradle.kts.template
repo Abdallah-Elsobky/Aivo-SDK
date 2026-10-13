@@ -1,0 +1,69 @@
+// Template for shared/build.gradle.kts in a Kotlin Multiplatform project integrating Aivo SDK
+
+plugins {
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeCompiler)
+}
+
+kotlin {
+    // 1. Android Target
+    androidTarget {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
+    }
+
+    // 2. iOS Targets (Arm64 + Simulator + X64)
+    listOf(
+        iosArm64(),
+        iosSimulatorArm64(),
+        iosX64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "SharedAiKit"
+            isStatic = true
+            // Export Aivo SDK so Swift can access AivoSdkKt, FlowAdapter, and CancellableJob
+            export(libs.aivo.sdk)
+        }
+    }
+
+    // 3. JVM Desktop / Server Target
+    jvm("desktop")
+
+    sourceSets {
+        commonMain.dependencies {
+            // 🤖 Aivo SDK Multiplatform Complete Bundle (Release 1.0.1)
+            implementation(libs.bundles.aivo.sdk)
+
+            // Coroutines
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+
+            // Compose Multiplatform (UI)
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.ui)
+        }
+
+        androidMain.dependencies {
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+        }
+
+        commonTest.dependencies {
+            // 🧪 Aivo SDK Test Doubles
+            implementation("io.github.abdallah-elsobky:aivo-sdk-testing:1.0.1")
+            implementation(kotlin("test"))
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
+        }
+    }
+}
+
+android {
+    namespace = "com.example.shared"
+    compileSdk = 35
+    defaultConfig {
+        minSdk = 24
+    }
+}
