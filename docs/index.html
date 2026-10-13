@@ -221,37 +221,126 @@
 
           <h3>Step 2: Add Dependencies</h3>
           <p>
-            Select your target architecture below to view the exact dependency configuration:
+            Choose your project architecture below to view the optimized dependency configuration:
           </p>
-          <div class="code-block">
-            <div class="code-header">
-              <div class="window-controls">
-                <span class="window-dot dot-red"></span>
-                <span class="window-dot dot-yellow"></span>
-                <span class="window-dot dot-green"></span>
-              </div>
-              <div class="code-tabs">
-                <button class="code-tab active" data-pane="gradle-android">Android App</button>
-                <button class="code-tab" data-pane="gradle-kmp-toml">KMP libs.versions.toml</button>
-                <button class="code-tab" data-pane="gradle-kmp">KMP shared/build.gradle.kts</button>
-                <button class="code-tab" data-pane="gradle-jvm">Server / Desktop JVM</button>
-              </div>
-              <button class="copy-btn" data-target="gradle-android">Copy</button>
+
+          <div class="platform-selector-container">
+            <!-- Platform Selector Grid -->
+            <div class="platform-selector-grid">
+              <button type="button" class="platform-card-btn active" data-platform="panel-android">
+                <div class="platform-icon-box">🤖</div>
+                <div class="platform-info">
+                  <div class="platform-title-row">
+                    <span class="platform-title">Android Project</span>
+                    <span class="platform-badge">API 24+</span>
+                  </div>
+                  <span class="platform-subtitle">Single dependency • Automatic transitive AGP resolution</span>
+                </div>
+              </button>
+
+              <button type="button" class="platform-card-btn" data-platform="panel-kmp">
+                <div class="platform-icon-box">🌐</div>
+                <div class="platform-info">
+                  <div class="platform-title-row">
+                    <span class="platform-title">Kotlin Multiplatform</span>
+                    <span class="platform-badge badge-kmp">KMP Bundle</span>
+                  </div>
+                  <span class="platform-subtitle">Android, iOS, JVM & macOS shared codebase</span>
+                </div>
+              </button>
             </div>
-            <pre id="gradle-android" class="code-pane"><code class="language-groovy">// Android app/build.gradle.kts
+
+            <!-- PANEL 1: ANDROID -->
+            <div id="panel-android" class="platform-panel active">
+              <div class="panel-header-banner">
+                <div class="panel-header-main">
+                  <h4><span>🤖</span> Pure Android Integration</h4>
+                  <p>In standard Android apps, a single dependency provides the full Aivo SDK engine. Android Gradle Plugin (AGP) automatically resolves all runtime, provider, transport, and middleware modules.</p>
+                </div>
+                <div class="panel-meta-tags">
+                  <span class="panel-meta-tag highlight">Single Line Dependency</span>
+                  <span class="panel-meta-tag">Jetpack Compose Ready</span>
+                  <span class="panel-meta-tag">API 24+</span>
+                </div>
+              </div>
+
+              <div class="code-block">
+                <div class="code-header">
+                  <div class="window-controls">
+                    <span class="window-dot dot-red"></span>
+                    <span class="window-dot dot-yellow"></span>
+                    <span class="window-dot dot-green"></span>
+                  </div>
+                  <div class="code-tabs">
+                    <button class="code-tab active" data-pane="android-gradle">app/build.gradle.kts (Direct)</button>
+                    <button class="code-tab" data-pane="android-toml">gradle/libs.versions.toml (Version Catalog)</button>
+                  </div>
+                  <button class="copy-btn" data-target="android-gradle">Copy</button>
+                </div>
+                <pre id="android-gradle" class="code-pane"><code class="language-groovy">// app/build.gradle.kts
 dependencies {
-    // Option A: Direct Maven coordinate (AGP resolves all submodules transitively)
+    // 🤖 Aivo SDK Universal Multiplatform Engine (Android API 24+)
     implementation("io.github.abdallah-elsobky:aivo-sdk:1.0.1")
 
-    // Option B: Version Catalog (gradle/libs.versions.toml)
-    // implementation(libs.aivo.sdk)
+    // 🧪 Optional Test Doubles (FakeLlmProvider, InMemoryTelemetry)
+    testImplementation("io.github.abdallah-elsobky:sdk-testing:1.0.1")
 
-    // Kotlin Coroutines & JSON Serialization
+    // Coroutines & Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 }</code></pre>
 
-            <pre id="gradle-kmp-toml" class="code-pane" style="display: none;"><code class="language-toml"># gradle/libs.versions.toml
+                <pre id="android-toml" class="code-pane" style="display: none;"><code class="language-toml"># gradle/libs.versions.toml
+[versions]
+aivo = "1.0.1"
+
+[libraries]
+aivo-sdk = { module = "io.github.abdallah-elsobky:aivo-sdk", version.ref = "aivo" }
+aivo-sdk-testing = { module = "io.github.abdallah-elsobky:sdk-testing", version.ref = "aivo" }
+
+# In app/build.gradle.kts:
+# dependencies {
+#     implementation(libs.aivo.sdk)
+#     testImplementation(libs.aivo.sdk.testing)
+# }</code></pre>
+              </div>
+
+              <div class="callout callout-tip" style="margin-top: 1rem;">
+                <div class="callout-icon">💡</div>
+                <div class="callout-content">
+                  <strong>Zero Extra Configuration Needed:</strong> In Android projects, declaring <code>aivo-sdk</code> automatically includes <code>sdk-runtime</code>, <code>sdk-core</code>, <code>sdk-transport</code>, and all official providers (Gemini, Ollama, OpenAI) into your compilation classpath.
+                </div>
+              </div>
+            </div>
+
+            <!-- PANEL 2: KMP -->
+            <div id="panel-kmp" class="platform-panel">
+              <div class="panel-header-banner">
+                <div class="panel-header-main">
+                  <h4><span>🌐</span> Kotlin Multiplatform (KMP) & Compose Multiplatform</h4>
+                  <p>In KMP projects, <code>commonMain</code> compiles multiplatform klib binaries across Android, iOS, and JVM. Use the Version Catalog bundle below to guarantee complete symbol availability with zero classpath errors.</p>
+                </div>
+                <div class="panel-meta-tags">
+                  <span class="panel-meta-tag highlight">libs.bundles.aivo.sdk</span>
+                  <span class="panel-meta-tag">Kotlin 2.0+</span>
+                  <span class="panel-meta-tag">Android • iOS • JVM</span>
+                </div>
+              </div>
+
+              <div class="code-block">
+                <div class="code-header">
+                  <div class="window-controls">
+                    <span class="window-dot dot-red"></span>
+                    <span class="window-dot dot-yellow"></span>
+                    <span class="window-dot dot-green"></span>
+                  </div>
+                  <div class="code-tabs">
+                    <button class="code-tab active" data-pane="kmp-toml-pane">1. gradle/libs.versions.toml (Bundle)</button>
+                    <button class="code-tab" data-pane="kmp-gradle-pane">2. shared/build.gradle.kts (commonMain)</button>
+                  </div>
+                  <button class="copy-btn" data-target="kmp-toml-pane">Copy</button>
+                </div>
+                <pre id="kmp-toml-pane" class="code-pane"><code class="language-toml"># gradle/libs.versions.toml
 [versions]
 aivo = "1.0.1"
 
@@ -279,7 +368,7 @@ aivo-sdk = [
     "aivo-sdk-provider-openai"
 ]</code></pre>
 
-            <pre id="gradle-kmp" class="code-pane" style="display: none;"><code class="language-groovy">// shared/build.gradle.kts (Kotlin Multiplatform)
+                <pre id="kmp-gradle-pane" class="code-pane" style="display: none;"><code class="language-groovy">// shared/build.gradle.kts (or any KMP module)
 kotlin {
     androidTarget()
     iosArm64()
@@ -288,8 +377,8 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            // Complete Aivo SDK Multiplatform Bundle
-            implementation(libs.bundles.aivo.full)
+            // 🤖 Full Aivo Multiplatform Engine Bundle
+            implementation(libs.bundles.aivo.sdk)
 
             // Optional: Coroutines & Serialization
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
@@ -297,21 +386,17 @@ kotlin {
         }
     }
 }</code></pre>
+              </div>
 
-            <pre id="gradle-jvm" class="code-pane" style="display: none;"><code class="language-groovy">// build.gradle.kts (Desktop / Server JVM)
-dependencies {
-    implementation("io.github.abdallah-elsobky:aivo-sdk:1.0.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
-}</code></pre>
-          </div>
-
-          <div class="callout callout-info" style="margin-top: 1rem;">
-            <div class="callout-icon">💡</div>
-            <div class="callout-content">
-              <strong>Why use the Version Catalog Bundle for KMP?</strong>
-              <p style="margin: 0.25rem 0 0 0; font-size: 0.88rem; color: var(--text-dim);">
-                In pure Android projects, Gradle's Android plugin automatically resolves POM compile dependencies transitively, allowing a single <code>implementation("io.github.abdallah-elsobky:aivo-sdk:1.0.1")</code> line. However, in <strong>Kotlin Multiplatform (KMP)</strong>, <code>commonMain</code> compiles multiplatform klibs for every target (Android, iOS, JVM). Declaring <code>libs.bundles.aivo.full</code> gives you a single clean line in your build script while guaranteeing complete symbol availability for all providers, agent engines (such as <code>AgentDefinition</code>), transport, and middleware across all platforms without classpath conflicts.
-              </p>
+              <div class="callout callout-info" style="margin-top: 1rem;">
+                <div class="callout-icon">💡</div>
+                <div class="callout-content">
+                  <strong>Why use the Version Catalog Bundle in KMP?</strong>
+                  <p style="margin: 0.25rem 0 0 0; font-size: 0.88rem; color: var(--text-dim);">
+                    In Kotlin Multiplatform, Gradle's metadata compiler generates target-specific klibs for each platform (Android, iOS Arm64, Simulator, JVM). Declaring the <code>aivo-sdk</code> bundle gives you a single clean line (<code>implementation(libs.bundles.aivo.sdk)</code>) in your build script while guaranteeing complete symbol resolution for <code>AgentDefinition</code>, providers, and transport across all targets without missing class or classpath errors.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 

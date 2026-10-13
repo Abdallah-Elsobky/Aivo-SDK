@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAudienceSwitcher();
   initCodeCopyButtons();
   initCodeTabs();
+  initPlatformSelector();
   initSearch();
   initPlayground();
   initScrollSpy();
@@ -173,6 +174,27 @@ function initCodeTabs() {
           copyBtn.setAttribute('data-target', targetId);
         }
       });
+    });
+  });
+}
+
+/* --------------------------------------------------------------------------
+   4b. Target Architecture Platform Selector (Android vs KMP vs JVM)
+   -------------------------------------------------------------------------- */
+function initPlatformSelector() {
+  const buttons = document.querySelectorAll('.platform-card-btn');
+  const panels = document.querySelectorAll('.platform-panel');
+  if (!buttons.length || !panels.length) return;
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const targetId = btn.getAttribute('data-platform');
+      panels.forEach(panel => {
+        panel.classList.toggle('active', panel.id === targetId);
+      });
+      if (window.Prism) Prism.highlightAll();
     });
   });
 }

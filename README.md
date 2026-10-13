@@ -241,13 +241,13 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.bundles.aivo.full)
+            implementation(libs.bundles.aivo.sdk)
         }
     }
 }
 ```
 
-> **Why the bundle?** In KMP, multiplatform klib compilation requires direct access to module metadata for each target in `commonMain`. Using `libs.bundles.aivo.full` provides a single clean line in your build script while guaranteeing complete symbol availability for all providers, agent engines, and configuration tools across Android, JVM, and iOS!
+> **Why the bundle?** In KMP, multiplatform klib compilation requires direct access to module metadata for each target in `commonMain`. Using `libs.bundles.aivo.sdk` provides a single clean line in your build script while guaranteeing complete symbol availability for all providers, agent engines, and configuration tools across Android, JVM, and iOS!
 
 ---
 
