@@ -96,8 +96,8 @@ function initAudienceSwitcher() {
         if (heroDesc) heroDesc.textContent = 'Deep-dive into the 4-layer clean architecture, zero-dependency SSE streaming post-decoders, reactive execution lifecycles, and contributor invariants that power Aivo SDK.';
         if (heroActions) {
           heroActions.innerHTML = `
-            <a href="#architecture-layers" class="btn-primary">View 4-Layer Architecture</a>
-            <a href="#execution-flows" class="btn-secondary">Explore Execution Diagrams</a>
+            <a href="#engine-flow" class="btn-primary">Explore End-to-End Engine Flow</a>
+            <a href="#architecture-layers" class="btn-secondary">View 4-Layer Architecture</a>
           `;
         }
         localStorage.setItem('aivo_docs_audience', 'dev');
@@ -451,6 +451,7 @@ function initSearch() {
     { title: '🌟 Full Master Example: All Features Combined', section: 'master-example', category: 'User Guide', text: 'Complete production app master sample using Ollama memory tools multi-agent compose flow confirmation gate' },
 
     // Dev / Contributor Topics
+    { title: '⚡ Complete Engine Flow: How Aivo SDK Works Internally', section: 'engine-flow', category: 'Dev Portal', text: 'How SDK works internally user message parameter extraction tool calling clean architecture usecases bearer token isolation sequence diagram lifecycle' },
     { title: '🏛️ 4-Layer Clean Architecture & Module Matrix', section: 'architecture-layers', category: 'Dev Portal', text: 'Core Transport Providers Runtime inward dependency rule SOLID clean architecture module matrix' },
     { title: '🗂️ File Inventory & Core Invariants', section: 'file-inventory', category: 'Dev Portal', text: 'File by file breakdown sdk-core pure kotlin no reflection invariant zero dependencies' },
     { title: '🔄 Execution Lifecycles & Sequence Flows', section: 'execution-flows', category: 'Dev Portal', text: 'Level 1 to Level 4 execution sequences tool safety validation pipeline SSE decoders raw frames' },

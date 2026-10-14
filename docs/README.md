@@ -29,4 +29,5 @@ Please select the documentation guide relevant to your goals:
 * [02. Execution Flows & Lifecycles](dev/02-execution-flows.md) — Sequence diagrams for Level 1–4 execution, tool safety pipeline, memory lifecycle, and framing decoders.
 * [03. Debugging & Troubleshooting Playbook](dev/03-debugging-and-troubleshooting-playbook.md) — Diagnosing streaming glitches, tool validation errors, concurrency deadlocks, and cancellation invariants.
 * [04. Extending the SDK](dev/04-extending-the-sdk.md) — Adding new LLM providers, custom wire protocols, and custom memory backends.
+* [05. Tool Calling & UseCases Lifecycle](dev/05-end-to-end-tool-calling-and-usecases-flow.md) — Deep-dive trace of parameter extraction, Clean Architecture UseCase bridges, token security, and response synthesis.
 * [Architecture Decision Records (ADR)](dev/adr/) — Historical log of fundamental architectural decisions (`0001`, `0002`, `0003`).

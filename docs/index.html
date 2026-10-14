@@ -131,9 +131,17 @@
       <!-- Dev Contributor Navigation -->
       <div id="nav-dev-guide" style="display: none;">
         <div class="sidebar-nav-group">
+          <div class="sidebar-heading">Internal Engine Lifecycle</div>
+          <ul class="sidebar-links">
+            <li><a href="#engine-flow" class="sidebar-link active"><span class="link-icon">⚡</span> End-to-End Engine
+                Flow</a></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-nav-group">
           <div class="sidebar-heading">Core Architecture</div>
           <ul class="sidebar-links">
-            <li><a href="#architecture-layers" class="sidebar-link active"><span class="link-icon">🏛️</span> 4-Layer
+            <li><a href="#architecture-layers" class="sidebar-link"><span class="link-icon">🏛️</span> 4-Layer
                 Architecture</a></li>
             <li><a href="#file-inventory" class="sidebar-link"><span class="link-icon">🗂️</span> File Inventory &
                 Invariants</a></li>
@@ -1402,6 +1410,1198 @@ class TravelViewModel : ViewModel() {
            DEV / CONTRIBUTOR CONTENT
            =================================================================== -->
       <div class="audience-dev" style="display: none;">
+
+        <!-- 0. Complete Engine Flow: How Aivo SDK Works Internally -->
+        <section id="engine-flow" class="doc-section">
+          <h2><span>⚡</span> Complete Engine Flow: How Aivo SDK Works Internally</h2>
+          <p>
+            This section provides contributors with an in-depth, code-level architectural walkthrough of how user
+            messages flow through the <strong>Aivo SDK</strong> engine: from initial user prompt in Jetpack Compose to
+            semantic parsing, JSON Schema compilation, suspended Clean Architecture <strong>UseCase</strong> invocation,
+            local token injection, and reactive streaming synthesis.
+          </p>
+
+          <!-- 1. The Brain-to-Domain Bridge -->
+          <h3>1. The "Brain-to-Domain" Bridge & Token Isolation</h3>
+          <p>
+            The fundamental design principle of Aivo SDK is <strong>strict separation between AI reasoning and business
+              execution</strong>. The AI model is never given direct access to sensitive credentials, private databases,
+            or execution environments:
+          </p>
+
+          <div class="feature-grid" style="margin: 1.5rem 0;">
+            <div class="feature-card">
+              <div class="feature-card-icon">🧠</div>
+              <div class="feature-card-title">LLM is the Reasoning Brain</div>
+              <div class="feature-card-desc">
+                The model analyzes natural-language intent, extracts values into structured parameters, and decides
+                <em>when</em> an action is needed. It operates as a pure stateless reasoning engine.
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-card-icon">🛠️</div>
+              <div class="feature-card-title">UseCases are the Hands & Feet</div>
+              <div class="feature-card-desc">
+                Your Clean Architecture UseCases execute business logic locally on the device (Retrofit/Ktor, Room,
+                Biometrics). They handle validation, business rules, and state mutation.
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-card-icon">🔒</div>
+              <div class="feature-card-title">Zero Token Leakage Invariant</div>
+              <div class="feature-card-desc">
+                Private user JWTs or session bearer tokens are <strong>never</strong> transmitted to external AI
+                providers. Your local repository injects auth headers directly into your API calls.
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Master Architecture & Call Hierarchy Diagram -->
+          <h3>2. Architecture & Call Hierarchy ("Who Calls Who & How It's Managed")</h3>
+          <p>
+            In production Android applications, clean separation of concerns is vital. The diagram below shows the complete
+            <strong>Dependency Injection (Ownership)</strong> hierarchy alongside the <strong>Runtime Call Sequence</strong>
+            connecting your Jetpack Compose UI, ViewModel, Agent Factory, Clean Architecture UseCases, and Local Repositories:
+          </p>
+
+          <!-- Interactive Call Hierarchy Card -->
+          <div class="call-hierarchy-card">
+            <div class="call-hierarchy-header">
+              <div class="call-hierarchy-title">
+                <span style="font-size: 1.3rem;">🏛️</span>
+                <span>Component Ownership & Runtime Call Graph</span>
+              </div>
+              <span class="flow-step-badge turn-tool" style="font-size: 0.75rem;">Clean Architecture + Aivo SDK</span>
+            </div>
+
+            <!-- 4 Column Flow Grid -->
+            <div class="call-chain-grid">
+              <!-- Column 1: Presentation Layer -->
+              <div class="call-chain-column">
+                <div class="call-chain-col-header col-presentation">
+                  <span>1. Presentation Layer</span>
+                  <span>UI / State</span>
+                </div>
+
+                <div class="call-chain-node">
+                  <div class="call-chain-node-title">
+                    <span>📱</span>
+                    <span>ChatScreen.kt</span>
+                  </div>
+                  <div class="call-chain-node-desc">
+                    Jetpack Compose UI. Observes <code>uiState</code>, renders chat bubbles, collects user input, and triggers BiometricPrompt dialog.
+                  </div>
+                  <div class="call-chain-rel-tag rel-calls">
+                    Calls ➔ ChatViewModel.onSend()
+                  </div>
+                </div>
+
+                <div class="call-chain-node">
+                  <div class="call-chain-node-title">
+                    <span>⚡</span>
+                    <span>ChatViewModel.kt</span>
+                  </div>
+                  <div class="call-chain-node-desc">
+                    Holds conversation state (<code>StateFlow</code>) in <code>viewModelScope</code>. Invokes <code>agent.stream(...)</code> and collects reactive events.
+                  </div>
+                  <div class="call-chain-rel-tag rel-injected">
+                    Injected with ➔ BankingAgentFactory
+                  </div>
+                </div>
+              </div>
+
+              <!-- Column 2: Agent Orchestration -->
+              <div class="call-chain-column">
+                <div class="call-chain-col-header col-orchestration">
+                  <span>2. Agent Orchestration</span>
+                  <span>Factory & SDK</span>
+                </div>
+
+                <div class="call-chain-node">
+                  <div class="call-chain-node-title">
+                    <span>🏭</span>
+                    <span>BankingAgentFactory.kt</span>
+                  </div>
+                  <div class="call-chain-node-desc">
+                    Configures the <code>AivoClient</code>. Declares tools via DSL and wires the tool's <code>execute</code> block to call the UseCase.
+                  </div>
+                  <div class="call-chain-rel-tag rel-injected">
+                    Injected with ➔ TransferMoneyUseCase
+                  </div>
+                </div>
+
+                <div class="call-chain-node">
+                  <div class="call-chain-node-title">
+                    <span>🔄</span>
+                    <span>AgentRuntime.kt</span>
+                  </div>
+                  <div class="call-chain-node-desc">
+                    SDK engine core. Manages per-session Mutex locking, Draft-07 schema compilation, tool loop execution, and atomic MemoryStore pairing.
+                  </div>
+                  <div class="call-chain-rel-tag rel-streams">
+                    Streams ➔ Flow&lt;AgentEvent&gt;
+                  </div>
+                </div>
+              </div>
+
+              <!-- Column 3: Domain & Data Layer -->
+              <div class="call-chain-column">
+                <div class="call-chain-col-header col-domain">
+                  <span>3. Domain & Data Layer</span>
+                  <span>Local Logic</span>
+                </div>
+
+                <div class="call-chain-node">
+                  <div class="call-chain-node-title">
+                    <span>💼</span>
+                    <span>TransferMoneyUseCase.kt</span>
+                  </div>
+                  <div class="call-chain-node-desc">
+                    Pure domain business logic. Suspended invoke operator that validates transaction rules and requests domain execution.
+                  </div>
+                  <div class="call-chain-rel-tag rel-injected">
+                    Injected with ➔ BankingRepository
+                  </div>
+                </div>
+
+                <div class="call-chain-node">
+                  <div class="call-chain-node-title">
+                    <span>🔒</span>
+                    <span>BankingRepositoryImpl.kt</span>
+                  </div>
+                  <div class="call-chain-node-desc">
+                    Injects user's private JWT Bearer token from Android Keystore / EncryptedSharedPreferences into local HTTP network calls.
+                  </div>
+                  <div class="call-chain-rel-tag rel-calls">
+                    Calls ➔ Core Banking API
+                  </div>
+                </div>
+              </div>
+
+              <!-- Column 4: External Services -->
+              <div class="call-chain-column">
+                <div class="call-chain-col-header col-external">
+                  <span>4. External Services</span>
+                  <span>Remote APIs</span>
+                </div>
+
+                <div class="call-chain-node">
+                  <div class="call-chain-node-title">
+                    <span>🧠</span>
+                    <span>Remote LLM Provider</span>
+                  </div>
+                  <div class="call-chain-node-desc">
+                    Stateless semantic reasoning engine (Gemini / Claude / OpenAI). Receives prompt + tool schemas, emits <code>tool_calls</code>. Never sees tokens.
+                  </div>
+                  <div class="call-chain-rel-tag rel-calls">
+                    Returns ➔ Structured Tool Calls
+                  </div>
+                </div>
+
+                <div class="call-chain-node">
+                  <div class="call-chain-node-title">
+                    <span>🏦</span>
+                    <span>Core Banking API</span>
+                  </div>
+                  <div class="call-chain-node-desc">
+                    Bank ledger backend. Authenticated solely by the local repository using private Bearer JWT. Returns transaction receipt.
+                  </div>
+                  <div class="call-chain-rel-tag rel-streams">
+                    Returns ➔ TransferReceipt
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Call & Ownership Matrix Table -->
+            <div style="margin-top: 1.25rem;">
+              <div style="font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; color: var(--text-accent); margin-bottom: 0.5rem;">
+                WHO CALLS WHO & HOW DEPENDENCIES ARE MANAGED:
+              </div>
+              <div class="data-table-wrapper" style="margin: 0;">
+                <table class="call-matrix-table">
+                  <thead>
+                    <tr>
+                      <th>Caller Component</th>
+                      <th>Callee Component</th>
+                      <th>Relationship & Purpose</th>
+                      <th>Data Passed</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>ChatScreen</strong> (Compose UI)</td>
+                      <td><strong>ChatViewModel</strong></td>
+                      <td>UI event invocation on button tap</td>
+                      <td><code>userMessage: "Send fifty bucks to @sarah for lunch"</code></td>
+                    </tr>
+                    <tr>
+                      <td><strong>ChatViewModel</strong></td>
+                      <td><strong>BankingAgentFactory</strong></td>
+                      <td>Dependency injection via Hilt; creates agent</td>
+                      <td>Configured <code>AivoClient</code> instance with registered tools</td>
+                    </tr>
+                    <tr>
+                      <td><strong>ChatViewModel</strong></td>
+                      <td><strong>AivoClient (AgentRuntime)</strong></td>
+                      <td>Calls <code>agent.stream(conversationId, text)</code></td>
+                      <td><code>ConversationId</code> + user prompt string</td>
+                    </tr>
+                    <tr>
+                      <td><strong>BankingAgentFactory</strong></td>
+                      <td><strong>TransferMoneyUseCase</strong></td>
+                      <td>Injected into Factory; wired inside tool's <code>execute</code> block</td>
+                      <td>Clean Architecture UseCase reference for tool execution</td>
+                    </tr>
+                    <tr>
+                      <td><strong>AgentRuntime</strong></td>
+                      <td><strong>Remote LLM Provider</strong></td>
+                      <td>Dispatches conversation history + Draft-07 tool schemas</td>
+                      <td>System instructions, chat messages, JSON function schemas</td>
+                    </tr>
+                    <tr>
+                      <td><strong>ToolExecutor</strong> (SDK)</td>
+                      <td><strong>ChatViewModel / UI</strong></td>
+                      <td>Emits confirmation event for high-risk tools</td>
+                      <td><code>AgentEvent.RequiresConfirmation(toolName, args)</code></td>
+                    </tr>
+                    <tr>
+                      <td><strong>ToolExecutor</strong> (SDK)</td>
+                      <td><strong>TransferMoneyUseCase</strong></td>
+                      <td>Unpacks validated <code>ToolArgs</code> and invokes domain logic</td>
+                      <td><code>recipient = "@sarah", amount = 50.0, memo = "lunch"</code></td>
+                    </tr>
+                    <tr>
+                      <td><strong>TransferMoneyUseCase</strong></td>
+                      <td><strong>BankingRepository</strong></td>
+                      <td>Invokes domain business logic</td>
+                      <td>Validated domain parameters; returns <code>Result&lt;TransferReceipt&gt;</code></td>
+                    </tr>
+                    <tr>
+                      <td><strong>BankingRepository</strong></td>
+                      <td><strong>Core Banking API</strong></td>
+                      <td>Local HTTPS call with local Bearer JWT injected</td>
+                      <td><code>Authorization: Bearer &lt;jwt&gt;</code> + Transfer Request</td>
+                    </tr>
+                    <tr>
+                      <td><strong>AgentRuntime</strong></td>
+                      <td><strong>ChatViewModel ➔ Compose UI</strong></td>
+                      <td>Streams final synthesis tokens back to UI in real time</td>
+                      <td><code>AgentEvent.TextDelta("I have transferred...")</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Phase 1: Dependency Assembly & Ownership -->
+          <h3>3. Phase 1: Dependency Assembly & Wiring ("How It Is Managed")</h3>
+          <p>
+            Before any message can be processed, each layer must be assembled with clean, decoupled dependencies.
+            Notice how each component cleanly injects the layer beneath it:
+          </p>
+
+          <div class="flow-timeline">
+
+            <!-- STEP 1: Repository -->
+            <div class="flow-step-block">
+              <div class="flow-step-header">
+                <span class="flow-step-badge turn-tool">PHASE 1 • STEP 1 • DATA LAYER</span>
+                <span class="panel-meta-tag">Android Data Layer</span>
+              </div>
+              <div class="flow-step-title">1. BankingRepository: Local JWT Bearer Token Injection</div>
+              <div class="flow-step-explanation">
+                <strong>Who owns it:</strong> The Data Layer.<br>
+                <strong>What it does:</strong> Reads the user's private JWT session token from secure storage
+                (<code>EncryptedSharedPreferences</code> or Android Keystore) and attaches it to outbound API calls.
+                <strong>The remote AI provider never sees or receives this token.</strong>
+              </div>
+
+              <div class="code-block" style="margin: 0;">
+                <div class="code-header">
+                  <div class="window-controls">
+                    <span class="window-dot dot-red"></span>
+                    <span class="window-dot dot-yellow"></span>
+                    <span class="window-dot dot-green"></span>
+                  </div>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="color: #f59e0b; font-weight: 600;">Data Layer</span>
+                    <span style="opacity: 0.4;">•</span>
+                    <span>BankingRepositoryImpl.kt</span>
+                  </span>
+                  <button class="copy-btn" data-target="code-arch-repo">Copy</button>
+                </div>
+                <pre><code id="code-arch-repo" class="language-kotlin">interface BankingRepository {
+    suspend fun executeTransfer(recipient: String, amount: Double, memo: String?): Result&lt;TransferReceipt&gt;
+}
+
+@Singleton
+class BankingRepositoryImpl @Inject constructor(
+    private val tokenStorage: TokenStorage, // Reads user JWT from EncryptedSharedPreferences
+    private val apiService: BankingApiService
+) : BankingRepository {
+
+    override suspend fun executeTransfer(
+        recipient: String,
+        amount: Double,
+        memo: String?
+    ): Result&lt;TransferReceipt&gt; = runCatching {
+        // Private token injected locally on-device — NEVER shared with LLM
+        val bearerToken = tokenStorage.getAccessToken() 
+            ?: throw IllegalStateException("User session expired. Please log in.")
+
+        apiService.postTransfer(
+            authHeader = "Bearer $bearerToken",
+            body = TransferRequest(recipient = recipient, amount = amount, memo = memo)
+        )
+    }
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="flow-step-connector">
+              <div class="flow-connector-circle">↓</div>
+            </div>
+
+            <!-- STEP 2: UseCase -->
+            <div class="flow-step-block">
+              <div class="flow-step-header">
+                <span class="flow-step-badge turn-user">PHASE 1 • STEP 2 • DOMAIN LAYER</span>
+                <span class="panel-meta-tag">Clean Architecture Domain</span>
+              </div>
+              <div class="flow-step-title">2. TransferMoneyUseCase: Pure Suspended Business Logic</div>
+              <div class="flow-step-explanation">
+                <strong>Who calls it:</strong> The Agent's Tool <code>execute</code> block.<br>
+                <strong>What it injects:</strong> <code>BankingRepository</code>.<br>
+                <strong>What it does:</strong> Validates monetary parameters, verifies account limits, and delegates to the repository.
+              </div>
+
+              <div class="code-block" style="margin: 0;">
+                <div class="code-header">
+                  <div class="window-controls">
+                    <span class="window-dot dot-red"></span>
+                    <span class="window-dot dot-yellow"></span>
+                    <span class="window-dot dot-green"></span>
+                  </div>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="color: #67e8f9; font-weight: 600;">Domain Layer</span>
+                    <span style="opacity: 0.4;">•</span>
+                    <span>TransferMoneyUseCase.kt</span>
+                  </span>
+                  <button class="copy-btn" data-target="code-arch-usecase">Copy</button>
+                </div>
+                <pre><code id="code-arch-usecase" class="language-kotlin">class TransferMoneyUseCase @Inject constructor(
+    private val repository: BankingRepository // Injected via Hilt
+) {
+    suspend operator fun invoke(
+        recipientAccount: String,
+        amount: Double,
+        memo: String?
+    ): Result&lt;TransferReceipt&gt; {
+        require(amount &gt; 0.0) { "Transfer amount must be strictly greater than zero." }
+        require(recipientAccount.isNotBlank()) { "Recipient account cannot be blank." }
+
+        // Calls repository with business validation passed
+        return repository.executeTransfer(
+            recipient = recipientAccount.trim(),
+            amount = amount,
+            memo = memo?.trim()
+        )
+    }
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="flow-step-connector">
+              <div class="flow-connector-circle">↓</div>
+            </div>
+
+            <!-- STEP 3: Agent Factory -->
+            <div class="flow-step-block">
+              <div class="flow-step-header">
+                <span class="flow-step-badge turn-tool">PHASE 1 • STEP 3 • AGENT FACTORY</span>
+                <span class="panel-meta-tag">Aivo SDK Orchestration</span>
+              </div>
+              <div class="flow-step-title">3. BankingAgentFactory: Wiring UseCases into Aivo SDK Tools</div>
+              <div class="flow-step-explanation">
+                <strong>Who owns it:</strong> The DI module / Orchestration layer.<br>
+                <strong>What it injects:</strong> <code>TransferMoneyUseCase</code> & <code>BiometricPromptManager</code>.<br>
+                <strong>What it does:</strong> Assembles the <code>AivoClient</code>. Declares the <code>transfer_money</code> tool
+                via DSL and wires its suspended <code>execute</code> block directly to <code>transferMoneyUseCase(...)</code>.
+              </div>
+
+              <div class="code-block" style="margin: 0;">
+                <div class="code-header">
+                  <div class="window-controls">
+                    <span class="window-dot dot-red"></span>
+                    <span class="window-dot dot-yellow"></span>
+                    <span class="window-dot dot-green"></span>
+                  </div>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="color: #a78bfa; font-weight: 600;">Agent Factory</span>
+                    <span style="opacity: 0.4;">•</span>
+                    <span>BankingAgentFactory.kt</span>
+                  </span>
+                  <button class="copy-btn" data-target="code-arch-factory">Copy</button>
+                </div>
+                <pre><code id="code-arch-factory" class="language-kotlin">@Singleton
+class BankingAgentFactory @Inject constructor(
+    private val transferMoneyUseCase: TransferMoneyUseCase, // Injected domain usecase
+    private val biometricManager: BiometricPromptManager,
+    private val memoryStore: MemoryStore
+) {
+    fun create(): AivoClient = aivoSdk {
+        model = "gemini-2.0-flash"
+        systemPrompt = "You are an intelligent banking assistant. Use tools when financial operations are requested."
+        memory = memoryStore
+
+        // Register tools with Clean Architecture UseCase delegation
+        tools {
+            tool("transfer_money", "Transfers funds to a recipient account") {
+                risk(ToolRisk.HIGH)
+                requiresConfirmation(true)
+
+                param("recipient_account", "Receiver username or IBAN", ParamType.String, required = true)
+                param("amount", "Monetary amount in USD", ParamType.Double, required = true)
+                param("memo", "Optional payment note", ParamType.String, required = false)
+
+                // The bridge: tool execute calls the injected UseCase!
+                execute { args -&gt;
+                    val recipient = args.string("recipient_account")
+                    val amount = args.double("amount")
+                    val memo = args.stringOrNull("memo")
+
+                    val result = transferMoneyUseCase(recipient, amount, memo)
+                    result.fold(
+                        onSuccess = { receipt -&gt; 
+                            ToolResult.Success(receipt.toJson()) 
+                        },
+                        onFailure = { error -&gt; 
+                            ToolResult.Failure(error.message ?: "Transfer failed") 
+                        }
+                    )
+                }
+            }
+        }
+
+        security {
+            confirmationHandler = ConfirmationHandler { toolName, args -&gt;
+                biometricManager.authenticateUser("Authorize Transfer", "Confirm $$args")
+            }
+        }
+    }
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="flow-step-connector">
+              <div class="flow-connector-circle">↓</div>
+            </div>
+
+            <!-- STEP 4: ViewModel -->
+            <div class="flow-step-block">
+              <div class="flow-step-header">
+                <span class="flow-step-badge turn-user">PHASE 1 • STEP 4 • VIEWMODEL</span>
+                <span class="panel-meta-tag">Android Presentation Layer</span>
+              </div>
+              <div class="flow-step-title">4. ChatViewModel: Managing Agent Lifecycle & UI State</div>
+              <div class="flow-step-explanation">
+                <strong>Who calls it:</strong> <code>ChatScreen.kt</code> (Jetpack Compose).<br>
+                <strong>What it injects:</strong> <code>BankingAgentFactory</code>.<br>
+                <strong>What it does:</strong> Initializes <code>private val aivo = agentFactory.create()</code>,
+                manages <code>StateFlow&lt;ChatUiState&gt;</code>, and launches reactive streaming in <code>viewModelScope</code>.
+              </div>
+
+              <div class="code-block" style="margin: 0;">
+                <div class="code-header">
+                  <div class="window-controls">
+                    <span class="window-dot dot-red"></span>
+                    <span class="window-dot dot-yellow"></span>
+                    <span class="window-dot dot-green"></span>
+                  </div>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="color: #38bdf8; font-weight: 600;">Presentation Layer</span>
+                    <span style="opacity: 0.4;">•</span>
+                    <span>ChatViewModel.kt</span>
+                  </span>
+                  <button class="copy-btn" data-target="code-arch-vm">Copy</button>
+                </div>
+                <pre><code id="code-arch-vm" class="language-kotlin">@HiltViewModel
+class ChatViewModel @Inject constructor(
+    private val agentFactory: BankingAgentFactory // Injected by Hilt
+) : ViewModel() {
+
+    private val aivo = agentFactory.create()
+    private val conversationId = ConversationId("session_primary")
+
+    private val _uiState = MutableStateFlow(ChatUiState())
+    val uiState: StateFlow&lt;ChatUiState&gt; = _uiState.asStateFlow()
+
+    fun onUserSendMessage(userPrompt: String) {
+        viewModelScope.launch {
+            _uiState.update { it.addUserMessage(userPrompt).copy(isGenerating = true) }
+
+            // Initiates reactive streaming with automatic Mutex locking
+            aivo.stream(conversationId, userPrompt).collect { event -&gt;
+                when (event) {
+                    is AgentEvent.ToolCallStarted -&gt; {
+                        _uiState.update { it.copy(status = "Preparing ${event.toolName}...") }
+                    }
+                    is AgentEvent.RequiresConfirmation -&gt; {
+                        _uiState.update { it.copy(pendingConfirmation = event) }
+                    }
+                    is AgentEvent.TextDelta -&gt; {
+                        _uiState.update { it.appendAssistantToken(event.text) }
+                    }
+                    is AgentEvent.RunCompleted -&gt; {
+                        _uiState.update { it.copy(isGenerating = false, status = null) }
+                    }
+                    is AgentEvent.Error -&gt; {
+                        _uiState.update { it.copy(error = event.throwable.message, isGenerating = false) }
+                    }
+                    else -&gt; Unit
+                }
+            }
+        }
+    }
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="flow-step-connector">
+              <div class="flow-connector-circle">↓</div>
+            </div>
+
+            <!-- STEP 5: Compose UI -->
+            <div class="flow-step-block">
+              <div class="flow-step-header">
+                <span class="flow-step-badge turn-user">PHASE 1 • STEP 5 • COMPOSE UI</span>
+                <span class="panel-meta-tag">Jetpack Compose UI</span>
+              </div>
+              <div class="flow-step-title">5. ChatScreen: Jetpack Compose User Interface</div>
+              <div class="flow-step-explanation">
+                <strong>Who owns it:</strong> The Android Activity / Navigation Graph.<br>
+                <strong>What it calls:</strong> <code>viewModel.onUserSendMessage(text)</code>.<br>
+                <strong>What it renders:</strong> The message feed, animated streaming bubbles, and the biometric approval dialog.
+              </div>
+
+              <div class="code-block" style="margin: 0;">
+                <div class="code-header">
+                  <div class="window-controls">
+                    <span class="window-dot dot-red"></span>
+                    <span class="window-dot dot-yellow"></span>
+                    <span class="window-dot dot-green"></span>
+                  </div>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="color: #6ee7b7; font-weight: 600;">Compose UI</span>
+                    <span style="opacity: 0.4;">•</span>
+                    <span>ChatScreen.kt</span>
+                  </span>
+                  <button class="copy-btn" data-target="code-arch-ui">Copy</button>
+                </div>
+                <pre><code id="code-arch-ui" class="language-kotlin">@Composable
+fun ChatScreen(viewModel: ChatViewModel = hiltViewModel()) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var inputText by remember { mutableStateOf("") }
+
+    Scaffold(
+        bottomBar = {
+            ChatInputBar(
+                text = inputText,
+                onTextChanged = { inputText = it },
+                onSendClicked = {
+                    if (inputText.isNotBlank()) {
+                        viewModel.onUserSendMessage(inputText)
+                        inputText = ""
+                    }
+                }
+            )
+        }
+    ) { padding -&gt;
+        MessageList(messages = uiState.messages, modifier = Modifier.padding(padding))
+    }
+}</code></pre>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 4. Phase 2: Complete Runtime Execution Chain -->
+          <h3 style="margin-top: 3rem;">4. Phase 2: Runtime Execution Lifecycle ("Who Calls Who - Request Walkthrough")</h3>
+          <p>
+            Now that all components and their relationships are clear, follow the exact runtime execution chain when a user sends:
+            <strong><em>"Send fifty bucks to @sarah for lunch"</em></strong>. Every step traces the exact method call and JSON wire payload:
+          </p>
+
+          <div class="flow-timeline">
+
+            <!-- STEP 6: UI to ViewModel & Mutex -->
+            <div class="flow-step-block">
+              <div class="flow-step-header">
+                <span class="flow-step-badge turn-user">PHASE 2 • STEP 6 • CLIENT INITIATION</span>
+                <span class="panel-meta-tag">Compose ➔ ViewModel ➔ SDK Runtime</span>
+              </div>
+              <div class="flow-step-title">6. User Action & AgentRuntime Mutex Lock</div>
+              <div class="flow-step-explanation">
+                <strong>Execution sequence:</strong> User taps Send in <code>ChatScreen</code> ➔ <code>ChatViewModel.onUserSendMessage(...)</code>
+                ➔ <code>aivo.stream(...)</code>.<br>
+                Internally, <code>AgentRuntime</code> immediately acquires a per-conversation <strong>Mutex lock</strong>.
+                This guarantees strict FIFO ordering, preventing multiple concurrent coroutines from corrupting conversation state.
+              </div>
+
+              <div class="code-block" style="margin: 0;">
+                <div class="code-header">
+                  <div class="window-controls">
+                    <span class="window-dot dot-red"></span>
+                    <span class="window-dot dot-yellow"></span>
+                    <span class="window-dot dot-green"></span>
+                  </div>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="color: #67e8f9; font-weight: 600;">SDK Runtime Internals</span>
+                    <span style="opacity: 0.4;">•</span>
+                    <span>AgentRuntime.kt</span>
+                  </span>
+                  <button class="copy-btn" data-target="code-step6-mutex">Copy</button>
+                </div>
+                <pre><code id="code-step6-mutex" class="language-kotlin">override fun stream(conversationId: ConversationId, prompt: String): Flow&lt;AgentEvent&gt; = flow {
+    // 1. Acquire per-conversation Mutex to prevent concurrent race conditions
+    val sessionMutex = sessionMutexPool.getOrCreate(conversationId)
+    sessionMutex.withLock {
+        // 2. Commit user message to persistent MemoryStore
+        memory.add(conversationId, Message(role = Role.USER, content = prompt))
+
+        // 3. Launch ToolCallingLoop with compiled tool schemas
+        toolCallingLoop.run(conversationId, memory.getHistory(conversationId)).collect { event -&gt;
+            emit(event)
+        }
+    }
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="flow-step-connector">
+              <div class="flow-connector-circle">↓</div>
+            </div>
+
+            <!-- STEP 7: Schema Compilation -->
+            <div class="flow-step-block">
+              <div class="flow-step-header">
+                <span class="flow-step-badge turn-tool">PHASE 2 • STEP 7 • SCHEMA COMPILATION</span>
+                <span class="panel-meta-tag">Aivo SDK Runtime</span>
+              </div>
+              <div class="flow-step-title">7. Compiling Kotlin Tools into Draft-07 JSON Schema</div>
+              <div class="flow-step-explanation">
+                Before dispatching the request to the LLM, <code>DefaultLoopContext</code> inspects all registered tools.
+                The SDK translates your type-safe Kotlin <code>tool { param(...) }</code> declarations into
+                standard <strong>Draft-07 JSON Schema</strong> function specifications that the model understands.
+              </div>
+
+              <!-- 1. Top Section: Kotlin Tool Declaration (Full Width) -->
+              <div class="code-block" style="margin: 0;">
+                <div class="code-header">
+                  <div class="window-controls">
+                    <span class="window-dot dot-red"></span>
+                    <span class="window-dot dot-yellow"></span>
+                    <span class="window-dot dot-green"></span>
+                  </div>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="color: #a78bfa; font-weight: 600;">Kotlin Tool Declaration</span>
+                    <span style="opacity: 0.4;">•</span>
+                    <span>TransferMoneyTool.kt</span>
+                  </span>
+                  <button class="copy-btn" data-target="code-step7-kt">Copy</button>
+                </div>
+                <pre><code id="code-step7-kt" class="language-kotlin">val transferMoneyTool = tool("transfer_money", "Transfers funds to a recipient") {
+    risk(ToolRisk.HIGH)
+    requiresConfirmation(true)
+
+    param(
+        name = "recipient_account",
+        description = "Receiver username or IBAN",
+        type = ParamType.String,
+        required = true
+    )
+    param(
+        name = "amount",
+        description = "Monetary amount in USD",
+        type = ParamType.Double,
+        required = true
+    )
+    param(
+        name = "memo",
+        description = "Optional payment note",
+        type = ParamType.String,
+        required = false
+    )
+}</code></pre>
+              </div>
+
+              <!-- Pipeline Transformation Indicator -->
+              <div class="schema-transform-connector">
+                <div class="schema-transform-line"></div>
+                <div class="schema-transform-pill">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand-primary);"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+                  <span>Compiled into <strong>Draft-07 JSON Schema</strong> by <code>DefaultLoopContext</code></span>
+                </div>
+                <div class="schema-transform-line"></div>
+              </div>
+
+              <!-- 2. Bottom Section: Compiled Draft-07 JSON Schema (Full Width) -->
+              <div class="code-block" style="margin: 0;">
+                <div class="code-header">
+                  <div class="window-controls">
+                    <span class="window-dot dot-red"></span>
+                    <span class="window-dot dot-yellow"></span>
+                    <span class="window-dot dot-green"></span>
+                  </div>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="color: #38bdf8; font-weight: 600;">Compiled Draft-07 JSON Schema</span>
+                    <span style="opacity: 0.4;">•</span>
+                    <span>LLM Tools Wire Payload</span>
+                  </span>
+                  <button class="copy-btn" data-target="code-step7-json">Copy</button>
+                </div>
+                <pre><code id="code-step7-json" class="language-json">{
+  "name": "transfer_money",
+  "description": "Transfers funds to a recipient",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "recipient_account": {
+        "type": "string",
+        "description": "Receiver username or IBAN"
+      },
+      "amount": {
+        "type": "number",
+        "description": "Monetary amount in USD"
+      },
+      "memo": {
+        "type": "string",
+        "description": "Optional payment note"
+      }
+    },
+    "required": [
+      "recipient_account",
+      "amount"
+    ]
+  }
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="flow-step-connector">
+              <div class="flow-connector-circle">↓</div>
+            </div>
+
+            <!-- STEP 8: LLM Reasoning -->
+            <div class="flow-step-block">
+              <div class="flow-step-header">
+                <span class="flow-step-badge turn-model">PHASE 2 • STEP 8 • REASONING & EXTRACTION</span>
+                <span class="panel-meta-tag">Remote LLM Provider</span>
+              </div>
+              <div class="flow-step-title">8. Reasoning Turn: LLM Semantic Parsing & Tool Call Emission</div>
+              <div class="flow-step-explanation">
+                The LLM receives the user prompt and tool schemas. Rather than regex matching, the model's transformer
+                attention heads perform <strong>semantic entity extraction</strong>, mapping linguistic clues to the
+                schema properties:
+              </div>
+
+              <!-- Semantic Entity Extraction Table -->
+              <div class="data-table-wrapper" style="margin-bottom: 1.25rem;">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Phrase in User Message</th>
+                      <th>Linguistic & Attention Clues</th>
+                      <th>Matched Schema Field</th>
+                      <th>Normalized Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>"fifty bucks"</code></td>
+                      <td>Identifies currency concept (USD). Matches <em>"Monetary amount in USD"</em>.</td>
+                      <td><code>amount</code> (Double)</td>
+                      <td><code>50.0</code> (Text converted to float)</td>
+                    </tr>
+                    <tr>
+                      <td><code>"to @sarah"</code></td>
+                      <td>Preposition <em>"to"</em> indicates target receiver. Matches <em>"Receiver username or IBAN"</em>.</td>
+                      <td><code>recipient_account</code> (String)</td>
+                      <td><code>"@sarah"</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>"for lunch"</code></td>
+                      <td>Preposition <em>"for"</em> indicates reason/memo. Matches <em>"Optional payment note"</em>.</td>
+                      <td><code>memo</code> (String?)</td>
+                      <td><code>"lunch"</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p class="flow-step-explanation" style="margin-bottom: 0.75rem;">
+                The LLM does not respond with plain conversational text. Instead, it emits a structured
+                <code>tool_calls</code> wire payload back to the SDK:
+              </p>
+
+              <div class="code-block" style="margin: 0;">
+                <div class="code-header">
+                  <div class="window-controls">
+                    <span class="window-dot dot-red"></span>
+                    <span class="window-dot dot-yellow"></span>
+                    <span class="window-dot dot-green"></span>
+                  </div>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">LLM Wire Output (Turn 1)</span>
+                  <button class="copy-btn" data-target="code-step8-json">Copy</button>
+                </div>
+                <pre><code id="code-step8-json" class="language-json">{
+  "id": "chatcmpl-98214",
+  "choices": [{
+    "message": {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [{
+        "id": "call_tx_99882",
+        "type": "function",
+        "function": {
+          "name": "transfer_money",
+          "arguments": "{\"recipient_account\": \"@sarah\", \"amount\": 50.0, \"memo\": \"lunch\"}"
+        }
+      }]
+    }
+  }]
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="flow-step-connector">
+              <div class="flow-connector-circle">↓</div>
+            </div>
+
+            <!-- STEP 9: Confirmation Gate -->
+            <div class="flow-step-block">
+              <div class="flow-step-header">
+                <span class="flow-step-badge turn-tool">PHASE 2 • STEP 9 • SAFETY & CONFIRMATION</span>
+                <span class="panel-meta-tag">Aivo SDK Security Layer</span>
+              </div>
+              <div class="flow-step-title">9. Tool Interception & Human Confirmation Gate</div>
+              <div class="flow-step-explanation">
+                <code>ToolExecutor</code> intercepts the tool call. Because <code>transfer_money</code> is configured with
+                <code>risk(ToolRisk.HIGH)</code> and <code>requiresConfirmation(true)</code>, execution pauses immediately.
+                The SDK emits <code>AgentEvent.RequiresConfirmation</code> to <code>ChatViewModel</code>, prompting the user
+                to authorize via Android BiometricPrompt before any money is touched.
+              </div>
+
+              <div class="code-block" style="margin: 0;">
+                <div class="code-header">
+                  <div class="window-controls">
+                    <span class="window-dot dot-red"></span>
+                    <span class="window-dot dot-yellow"></span>
+                    <span class="window-dot dot-green"></span>
+                  </div>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">ConfirmationApproval.kt</span>
+                  <button class="copy-btn" data-target="code-step9">Copy</button>
+                </div>
+                <pre><code id="code-step9" class="language-kotlin">// Configured inside BankingAgentFactory security block
+security {
+    confirmationHandler = ConfirmationHandler { toolName, args -&gt;
+        val recipient = args.string("recipient_account")
+        val amount = args.double("amount")
+
+        // Suspends until biometric authentication succeeds
+        biometricManager.authenticateUser(
+            title = "Confirm Bank Transfer",
+            description = "Authorize sending $$amount to $recipient"
+        )
+    }
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="flow-step-connector">
+              <div class="flow-connector-circle">↓</div>
+            </div>
+
+            <!-- STEP 10: Tool Execution Delegation -->
+            <div class="flow-step-block">
+              <div class="flow-step-header">
+                <span class="flow-step-badge turn-tool">PHASE 2 • STEP 10 • EXECUTION DELEGATION</span>
+                <span class="panel-meta-tag">SDK ➔ UseCase ➔ Repository</span>
+              </div>
+              <div class="flow-step-title">10. Parameter Extraction & Clean Architecture Delegation</div>
+              <div class="flow-step-explanation">
+                Once biometric confirmation succeeds, the SDK invokes the tool's <code>execute</code> block and passes an ergonomic
+                <code>ToolArgs</code> instance. The tool extracts parameters and delegates directly to the injected
+                <code>TransferMoneyUseCase</code>, which calls <code>BankingRepository</code> to execute the transfer locally.
+              </div>
+
+              <div class="code-block" style="margin: 0 0 1.25rem 0;">
+                <div class="code-header">
+                  <div class="window-controls">
+                    <span class="window-dot dot-red"></span>
+                    <span class="window-dot dot-yellow"></span>
+                    <span class="window-dot dot-green"></span>
+                  </div>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">ToolExecutionDelegation.kt</span>
+                  <button class="copy-btn" data-target="code-step10">Copy</button>
+                </div>
+                <pre><code id="code-step10" class="language-kotlin">execute { args -&gt;
+    // 1. Extract validated parameters from ToolArgs
+    val recipient = args.string("recipient_account") // "@sarah"
+    val amount = args.double("amount")               // 50.0
+    val memo = args.stringOrNull("memo")             // "lunch"
+
+    // 2. Delegate to the injected Clean Architecture UseCase
+    val result = transferMoneyUseCase(recipient, amount, memo)
+
+    // 3. Convert domain Result into ToolResult
+    result.fold(
+        onSuccess = { receipt -&gt; 
+            ToolResult.Success(
+                """{"status": "SUCCESS", "txId": "${receipt.txId}", "amount": ${receipt.amount}, "newBalance": ${receipt.newBalance}}"""
+            )
+        },
+        onFailure = { error -&gt;
+            ToolResult.Failure(error.message ?: "Transfer failed")
+        }
+    )
+}</code></pre>
+              </div>
+
+              <!-- ToolArgs API Reference Table -->
+              <div class="data-table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Method</th>
+                      <th>Return Type</th>
+                      <th>Behavior on Missing Argument</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>args.string(name)</code></td>
+                      <td><code>String</code></td>
+                      <td>Throws <code>IllegalArgumentException</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>args.stringOrNull(name)</code></td>
+                      <td><code>String?</code></td>
+                      <td>Returns <code>null</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>args.int(name)</code></td>
+                      <td><code>Int</code></td>
+                      <td>Throws <code>IllegalArgumentException</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>args.intOrNull(name)</code></td>
+                      <td><code>Int?</code></td>
+                      <td>Returns <code>null</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>args.double(name)</code></td>
+                      <td><code>Double</code></td>
+                      <td>Throws <code>IllegalArgumentException</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>args.doubleOrNull(name)</code></td>
+                      <td><code>Double?</code></td>
+                      <td>Returns <code>null</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>args.bool(name)</code></td>
+                      <td><code>Boolean</code></td>
+                      <td>Throws <code>IllegalArgumentException</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="flow-step-connector">
+              <div class="flow-connector-circle">↓</div>
+            </div>
+
+            <!-- STEP 11: Atomic Pairing -->
+            <div class="flow-step-block">
+              <div class="flow-step-header">
+                <span class="flow-step-badge turn-tool">PHASE 2 • STEP 11 • ATOMIC PAIRING</span>
+                <span class="panel-meta-tag">Aivo SDK Runtime</span>
+              </div>
+              <div class="flow-step-title">11. Packaging Tool Result & Atomic Conversation Pairing</div>
+              <div class="flow-step-explanation">
+                The outcome of the UseCase is converted into a <code>Role.TOOL</code> message. The SDK enforces the
+                <strong>Atomic Tool Pairing Invariant</strong>: both the assistant's tool call and the tool result are
+                committed together into <code>MemoryStore</code> under the Mutex lock, ensuring conversation history
+                never becomes corrupt or orphaned.
+              </div>
+
+              <div class="code-block" style="margin: 0;">
+                <div class="code-header">
+                  <div class="window-controls">
+                    <span class="window-dot dot-red"></span>
+                    <span class="window-dot dot-yellow"></span>
+                    <span class="window-dot dot-green"></span>
+                  </div>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">ToolResultMessage.json</span>
+                  <button class="copy-btn" data-target="code-step11-json">Copy</button>
+                </div>
+                <pre><code id="code-step11-json" class="language-json">{
+  "role": "tool",
+  "tool_call_id": "call_tx_99882",
+  "content": "{\"status\": \"SUCCESS\", \"txId\": \"TX-99882\", \"amount\": 50.0, \"newBalance\": 450.0}"
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="flow-step-connector">
+              <div class="flow-connector-circle">↓</div>
+            </div>
+
+            <!-- STEP 12: Synthesis & Streaming -->
+            <div class="flow-step-block">
+              <div class="flow-step-header">
+                <span class="flow-step-badge turn-model">PHASE 2 • STEP 12 • SYNTHESIS & STREAMING</span>
+                <span class="panel-meta-tag">SDK ➔ ViewModel ➔ Jetpack Compose UI</span>
+              </div>
+              <div class="flow-step-title">12. Synthesis Turn: LLM Generates Final Answer & Streams to UI</div>
+              <div class="flow-step-explanation">
+                The conversation history (now containing the tool receipt) is dispatched back to the LLM for a final synthesis
+                turn. The model reads the transaction receipt and streams friendly natural-language tokens
+                (<code>AgentEvent.TextDelta</code>) through the ViewModel directly to your Jetpack Compose chat bubble.
+              </div>
+
+              <div class="code-block" style="margin: 0 0 1.25rem 0;">
+                <div class="code-header">
+                  <div class="window-controls">
+                    <span class="window-dot dot-red"></span>
+                    <span class="window-dot dot-yellow"></span>
+                    <span class="window-dot dot-green"></span>
+                  </div>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">ComposeStreamingCollector.kt</span>
+                  <button class="copy-btn" data-target="code-step12">Copy</button>
+                </div>
+                <pre><code id="code-step12" class="language-kotlin">aivo.stream(conversationId, userText).collect { event -&gt;
+    when (event) {
+        is AgentEvent.ToolCallStarted -&gt; {
+            _uiState.update { it.copy(status = "Processing ${event.toolName}...") }
+        }
+        is AgentEvent.TextDelta -&gt; {
+            // Append incoming tokens to Compose bubble in real time
+            _uiState.update { it.appendToken(event.text) }
+        }
+        is AgentEvent.RunCompleted -&gt; {
+            _uiState.update { it.copy(isGenerating = false, status = null) }
+        }
+        else -&gt; Unit
+    }
+}</code></pre>
+              </div>
+
+              <!-- Final Rendered User Bubble Display -->
+              <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-medium); border-radius: var(--radius-md); padding: 1.25rem 1.5rem;">
+                <div style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--color-success); margin-bottom: 0.4rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem;">
+                  <span>✓</span>
+                  <span>FINAL STREAMED UI OUTPUT</span>
+                </div>
+                <div style="font-size: 0.95rem; color: var(--text-main); line-height: 1.6;">
+                  "I have successfully transferred $50.00 to @sarah for lunch! (Transaction ID: TX-99882). Your remaining account balance is $450.00."
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 5. Prompt Engineering for Tools -->
+          <h3>5. Prompt Engineering for Tools: Writing High-Precision Descriptions</h3>
+          <p>
+            The accuracy of argument extraction depends directly on the clarity and constraints provided in your
+            parameter descriptions:
+          </p>
+
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>❌ Poor Description</th>
+                  <th>✅ High-Precision Description</th>
+                  <th>Why It Matters</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>param("q", "query")</code></td>
+                  <td><code>param("query", "Item search keywords like 'blue sneakers' or 'coffee beans'")</code></td>
+                  <td>Gives the model concrete examples of expected query patterns.</td>
+                </tr>
+                <tr>
+                  <td><code>param("date", "date")</code></td>
+                  <td><code>param("date", "Target date in ISO-8601 format (YYYY-MM-DD), e.g. 2026-10-15")</code></td>
+                  <td>Forces the model to automatically normalize <em>"next Friday"</em> to a clean ISO date.</td>
+                </tr>
+                <tr>
+                  <td><code>param("status", "status")</code></td>
+                  <td><code>param("status", "Order status", enum = listOf("PENDING", "SHIPPED", "DELIVERED"))</code></td>
+                  <td>Strictly constrains the LLM to only pick from valid enum states.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 6. Contributor Invariants for Tool Calling -->
+          <h3>6. Contributor Invariants for Tool Calling</h3>
+          <p>
+            When contributing to <code>ToolCallingLoop.kt</code>, <code>ToolExecutor.kt</code>, or
+            <code>DefaultLoopContext.kt</code>, these four invariants must be strictly preserved:
+          </p>
+
+          <div class="feature-grid" style="margin: 1.5rem 0;">
+            <div class="feature-card">
+              <div class="feature-card-icon">🛡️</div>
+              <div class="feature-card-title">1. Exception Isolation</div>
+              <div class="feature-card-desc">
+                Exceptions inside a tool's <code>execute</code> block are caught by <code>ToolBuilder</code> and converted
+                into <code>ToolResult.Failure</code>. The error is returned to the LLM so it can explain the issue
+                conversationally without crashing the Android app.
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-card-icon">⚡</div>
+              <div class="feature-card-title">2. Never Swallow Cancellation</div>
+              <div class="feature-card-desc">
+                If the user navigates away or cancels the coroutine, <code>CancellationException</code> must propagate
+                immediately to halt network requests and thread resources. Never catch generic <code>Throwable</code>
+                without rethrowing <code>CancellationException</code>.
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-card-icon">🔗</div>
+              <div class="feature-card-title">3. Atomic Tool Pairing Invariant</div>
+              <div class="feature-card-desc">
+                Every <code>ToolCall</code> emitted by the model must be strictly paired with a corresponding
+                <code>ToolResult</code> message. Both are committed atomically to <code>MemoryStore</code> under a Mutex
+                to prevent orphaned message states.
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-card-icon">🔁</div>
+              <div class="feature-card-title">4. Infinite Loop Protection</div>
+              <div class="feature-card-desc">
+                <code>ToolCallingLoop</code> tracks consecutive identical tool invocations. If the LLM repeats the exact
+                same tool call with the exact same arguments 3 times, the loop compels textual synthesis to break the
+                cycle.
+              </div>
+            </div>
+          </div>
+        </section>
 
         <!-- 1. 4-Layer Architecture -->
         <section id="architecture-layers" class="doc-section">

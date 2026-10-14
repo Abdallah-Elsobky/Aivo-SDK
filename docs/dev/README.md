@@ -77,6 +77,7 @@ The developer guide is divided into five deep-dive documents:
 | [02. Execution Flows & Lifecycles](02-execution-flows.md) | Step-by-step trace and sequence diagrams for all 8 core flows: Level 1 LLM, Level 2 ReAct Loop, Level 3 Supervisor, Level 4 Workflows, Tool Safety Pipeline, Memory, Transport, and Declarative Loading. |
 | [03. Debugging & Troubleshooting Playbook](03-debugging-and-troubleshooting-playbook.md) | Practical root-cause analysis and battle-tested solutions for streaming glitches, tool schema validation errors, concurrency deadlocks, cancellation leaks, and provider API changes. |
 | [04. Extending the SDK](04-extending-the-sdk.md) | Guide for adding new LLM providers, custom wire protocols, custom memory stores, and custom reasoning loops. |
+| [05. Tool Calling & UseCases Lifecycle](05-end-to-end-tool-calling-and-usecases-flow.md) | Comprehensive, deep-dive trace of how agents parse natural language, extract parameters, bridge into Clean Architecture UseCases, manage auth tokens, and stream responses. |
 | [Architecture Decision Records (ADR)](adr/) | Historical record of key architectural choices and design invariants. |
 
 ---
