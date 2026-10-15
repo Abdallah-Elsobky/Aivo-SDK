@@ -79,7 +79,8 @@ function initAudienceSwitcher() {
         if (heroActions) {
           heroActions.innerHTML = `
             <a href="#interactive-playground" class="btn-primary">Try Interactive Configurator</a>
-            <a href="#getting-started" class="btn-secondary">Explore User Guide</a>
+            <a href="#demo-app" class="btn-secondary"><span>📱</span> KMP Demo App</a>
+            <a href="#agent-skills" class="btn-secondary"><span>🧠</span> Agent Skills</a>
           `;
         }
         localStorage.setItem('aivo_docs_audience', 'user');
@@ -449,6 +450,8 @@ function initSearch() {
     { title: '🧪 Offline Unit Testing', section: 'offline-testing', category: 'User Guide', text: 'FakeLlmProvider InMemoryTelemetry offline unit testing ViewModel runTest enqueueStreaming' },
     { title: '🔄 Custom Reasoning Loops & Pipelines', section: 'custom-loops', category: 'User Guide', text: 'Custom Agent Loop SequenceLoop ToolCallingLoop AgentRole StateKey ReAct blackboard pipeline' },
     { title: '🌟 Full Master Example: All Features Combined', section: 'master-example', category: 'User Guide', text: 'Complete production app master sample using Ollama memory tools multi-agent compose flow confirmation gate' },
+    { title: '📱 Production KMP Demo App', section: 'demo-app', category: 'User Guide', text: 'KMP Kotlin Multiplatform Compose Demo App Test-Aivo-SDK Android iOS Desktop streaming tool execution provider switcher' },
+    { title: '🧠 Official Agent Skills (skills.sh)', section: 'agent-skills', category: 'User Guide', text: 'Agent Skills skills.sh aivo-android aivo-kmp Cursor Claude Copilot Antigravity prompt instructions npx skills-cli add' },
 
     // Dev / Contributor Topics
     { title: '⚡ Complete Engine Flow: How Aivo SDK Works Internally', section: 'engine-flow', category: 'Dev Portal', text: 'How SDK works internally user message parameter extraction tool calling clean architecture usecases bearer token isolation sequence diagram lifecycle' },

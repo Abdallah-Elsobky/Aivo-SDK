@@ -126,6 +126,14 @@
             </li>
           </ul>
         </div>
+
+        <div class="sidebar-nav-group">
+          <div class="sidebar-heading">Ecosystem & Tooling</div>
+          <ul class="sidebar-links">
+            <li><a href="#demo-app" class="sidebar-link"><span class="link-icon">📱</span> KMP Demo App</a></li>
+            <li><a href="#agent-skills" class="sidebar-link"><span class="link-icon">🧠</span> Agent Skills (skills.sh)</a></li>
+          </ul>
+        </div>
       </div>
 
       <!-- Dev Contributor Navigation -->
@@ -182,7 +190,8 @@
             </p>
             <div class="hero-actions">
               <a href="#interactive-playground" class="btn-primary">Try Interactive Configurator</a>
-              <a href="#getting-started" class="btn-secondary">Explore User Guide</a>
+              <a href="#demo-app" class="btn-secondary"><span>📱</span> KMP Demo App</a>
+              <a href="#agent-skills" class="btn-secondary"><span>🧠</span> Agent Skills</a>
             </div>
           </div>
           <div class="hero-logo-card">
@@ -1401,6 +1410,234 @@ class TravelViewModel : ViewModel() {
         _pendingGate.value = null
     }
 }</code></pre>
+          </div>
+        </section>
+
+        <!-- 10. Production KMP Demo App -->
+        <section id="demo-app" class="doc-section">
+          <h2><span>📱</span> Production KMP Demo Application</h2>
+          <p>
+            Experience <strong>Aivo SDK</strong> in a complete, battle-tested reference application built with
+            <strong>Kotlin Multiplatform (KMP)</strong> and <strong>Compose Multiplatform (CMP)</strong> running across
+            Android, iOS, and Desktop from a single shared codebase.
+          </p>
+
+          <div style="text-align: center; margin: 2rem 0;">
+            <a href="https://github.com/Abdallah-Elsobky/Test-Aivo-SDK" target="_blank" rel="noopener noreferrer" style="display: inline-block;">
+              <img src="https://github.com/user-attachments/assets/8ded2f01-0138-40ab-892c-05358d41d131"
+                alt="Aivo SDK KMP Demo Application Screenshot"
+                style="width: 100%; max-width: 900px; border-radius: var(--radius-lg); border: 1px solid var(--border-medium); box-shadow: var(--shadow-card); transition: transform 0.2s ease;" />
+            </a>
+            <p style="font-size: 0.85rem; color: var(--text-dim); margin-top: 0.6rem;">
+              Live Compose Multiplatform chat application running Aivo SDK with streaming token rendering, tool execution, provider switching, and multi-agent coordination.
+            </p>
+          </div>
+
+          <div class="feature-grid" style="margin: 2rem 0;">
+            <div class="feature-card">
+              <div class="feature-card-icon">🌐</div>
+              <div class="feature-card-title">100% Kotlin Multiplatform</div>
+              <div class="feature-card-desc">
+                Clean Hexagonal Architecture in <code>commonMain</code> compiled for Android (API 24+), iOS (ARM64 & Simulator), and Desktop (JVM).
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-card-icon">🎨</div>
+              <div class="feature-card-title">Compose Multiplatform UI</div>
+              <div class="feature-card-desc">
+                Single unified Material 3 chat interface with markdown rendering, message bubble state management, and real-time typing flows.
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-card-icon">🌊</div>
+              <div class="feature-card-title">Reactive Token Streaming</div>
+              <div class="feature-card-desc">
+                Consumes Kotlin <code>Flow&lt;AgentEvent&gt;</code> deltas directly into Jetpack Compose <code>StateFlow</code> for butter-smooth word-by-word UI updates.
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-card-icon">🛠️</div>
+              <div class="feature-card-title">Tools & Human-in-the-Loop</div>
+              <div class="feature-card-desc">
+                Interactive tool calling with biometric and modal confirmation dialogs when high-risk actions are initiated by the agent.
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-card-icon">🔌</div>
+              <div class="feature-card-title">Multi-Provider Switcher</div>
+              <div class="feature-card-desc">
+                Switch dynamically at runtime between <strong>Google Gemini</strong>, <strong>Ollama Cloud</strong>, and <strong>OpenRouter</strong> with in-app API key setup.
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-card-icon">👥</div>
+              <div class="feature-card-title">Multi-Agent Teams</div>
+              <div class="feature-card-desc">
+                Demonstrates supervisor agent patterns delegating tasks to specialized sub-agents with depth and cycle limits.
+              </div>
+            </div>
+          </div>
+
+          <h3>Clone & Run the KMP Demo App</h3>
+          <p>You can clone and run the full demo application locally in minutes:</p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">Terminal</span>
+              <button class="copy-btn" data-target="code-demo-clone">Copy</button>
+            </div>
+            <pre><code id="code-demo-clone" class="language-bash"># 1. Clone the official KMP demo repository
+git clone https://github.com/Abdallah-Elsobky/Test-Aivo-SDK.git
+cd Test-Aivo-SDK
+
+# 2. Run Android App
+./gradlew :composeApp:installDebug
+
+# 3. Run Desktop App
+./gradlew :composeApp:run</code></pre>
+          </div>
+
+          <div style="margin-top: 1.5rem;">
+            <a href="https://github.com/Abdallah-Elsobky/Test-Aivo-SDK" target="_blank" rel="noopener noreferrer" class="btn-primary" style="gap: 0.5rem;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+              </svg>
+              View Test-Aivo-SDK on GitHub
+            </a>
+          </div>
+        </section>
+
+        <!-- 11. Official Agent Skills -->
+        <section id="agent-skills" class="doc-section">
+          <h2><span>🧠</span> Official Agent Skills (skills.sh)</h2>
+          <p>
+            Build faster, eliminate API hallucinations, and write clean idiomatic code by equipping your AI assistant with the official Aivo SDK Agent Skills hosted on <a href="https://www.skills.sh/abdallah-elsobky/aivo-sdk" target="_blank" rel="noopener noreferrer"><strong>skills.sh</strong></a>.
+          </p>
+
+          <div class="callout callout-info" style="margin: 1.5rem 0;">
+            <div class="callout-icon">💡</div>
+            <div class="callout-content">
+              <strong>What are Agent Skills?</strong>
+              Agent Skills are structured domain instruction sets designed for AI coding assistants (like <strong>Cursor</strong>, <strong>Claude Code</strong>, <strong>GitHub Copilot</strong>, <strong>Antigravity</strong>, and <strong>Windsurf</strong>). Instead of guessing or proposing deprecated APIs, the agent is pre-primed with verified architectural invariants, correct Version Catalog bundles, Kotlin DSL syntax, and security guardrails.
+            </div>
+          </div>
+
+          <h3>Available Skills in the Aivo Ecosystem</h3>
+
+          <div class="feature-grid" style="margin: 1.5rem 0;">
+            <div class="feature-card" style="border: 1px solid rgba(99, 102, 241, 0.35);">
+              <div class="feature-card-icon">🤖</div>
+              <div class="feature-card-title"><code>aivo-android</code> Skill</div>
+              <div class="feature-card-desc">
+                <strong>Platform:</strong> Native Android (API 24+)<br/><br/>
+                Comprehensive guide and production implementation toolkit for integrating Aivo SDK in native Android applications. Teaches the AI:
+                <ul style="margin: 0.5rem 0 0 1.2rem; font-size: 0.88rem; color: var(--text-muted);">
+                  <li>Jetpack Compose reactive chat streaming with <code>Flow&lt;AgentEvent&gt;</code></li>
+                  <li>Secure credential injection: <code>local.properties -> BuildConfig -> SecretString</code></li>
+                  <li>Room-backed persistent conversation memory (<code>RoomMemoryStore</code>)</li>
+                  <li>Biometric and Dialog Human-in-the-Loop confirmation gates</li>
+                  <li>Deterministic offline unit testing with <code>FakeLlmProvider</code> and <code>InMemoryTelemetry</code></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="feature-card" style="border: 1px solid rgba(139, 92, 246, 0.35);">
+              <div class="feature-card-icon">🌐</div>
+              <div class="feature-card-title"><code>aivo-kmp</code> Skill</div>
+              <div class="feature-card-desc">
+                <strong>Platform:</strong> Kotlin Multiplatform (KMP) & Compose Multiplatform<br/><br/>
+                Complete architecture and production integration guide for cross-platform AI agents sharing code across Android, iOS, JVM (Desktop/Server), and Darwin:
+                <ul style="margin: 0.5rem 0 0 1.2rem; font-size: 0.88rem; color: var(--text-muted);">
+                  <li>Version Catalog bundle <code>libs.bundles.aivo.sdk</code> in <code>commonMain</code></li>
+                  <li>Hexagonal Clean Architecture isolating provider types from UI</li>
+                  <li>Platform-specific secret injection (Android BuildConfig, iOS Info.plist, JVM env vars)</li>
+                  <li>Compose Multiplatform Material 3 chat interfaces</li>
+                  <li>Native iOS Swift interoperability shims (<code>FlowAdapter</code>, <code>CancellableJob</code>)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <h3>How to Install and Use the Skills</h3>
+
+          <p>
+            You can install both skills into any project using the official <code>skills-cli</code>:
+          </p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">Terminal (skills-cli)</span>
+              <button class="copy-btn" data-target="code-skills-install">Copy</button>
+            </div>
+            <pre><code id="code-skills-install" class="language-bash"># Install official Aivo SDK skills into your project
+npx skills-cli add abdallah-elsobky/aivo-sdk</code></pre>
+          </div>
+
+          <h3>Quick Context Prompts for AI Coding Sessions</h3>
+          <p>
+            Paste either prompt below into your initial AI conversation (Cursor, Claude, Copilot, ChatGPT) when starting a new app:
+          </p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <div class="window-controls">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <div class="code-tabs">
+                <button class="code-tab active" data-pane="prompt-android-pane">🤖 Pure Android Prompt</button>
+                <button class="code-tab" data-pane="prompt-kmp-pane">🌐 Kotlin Multiplatform Prompt</button>
+              </div>
+              <button class="copy-btn" data-target="prompt-android-pane">Copy</button>
+            </div>
+
+            <pre id="prompt-android-pane" class="code-pane"><code class="language-text">You are an expert Android AI engineer specializing in the Aivo SDK (io.github.abdallah-elsobky:aivo-sdk:1.0.1).
+Aivo SDK is a provider-agnostic, Kotlin Multiplatform AI agent framework supporting Ollama, Google Gemini, OpenRouter, and any OpenAI-compatible endpoint.
+Key architectural principles:
+1. Strict Hexagonal Architecture: ViewModel and UseCases interact with domain interfaces and AivoSdk. Never leak provider-specific or network types into UI layers.
+2. Security: Never hardcode API keys. Use local.properties -> BuildConfig -> SecretString.
+3. Streaming: Responses stream via Kotlin Flow&lt;AgentEvent&gt; (TextDelta, ReasoningDelta, ToolCallStarted, ToolCallExecuted, StepStarted, StepCompleted, RunCompleted, RunFailed).
+4. Tool Calling: Tools are defined via tool("name", "desc") { ... } DSL with typed params, risk levels (LOW, MEDIUM, HIGH), and optional ConfirmationHandler for human-in-the-loop approval.
+5. Multi-Agent: Supports supervisor delegation, SingleTurnLoop, ToolCallingLoop (ReAct), SequenceLoop, RouterLoop, and ParallelLoop.
+6. Memory: In-memory or custom MemoryStore (e.g. Room Database), with keepAll(), slidingWindow(N), or tokenBudget(tokens).
+7. Resilience & Errors: Built-in exponential backoff retry with jitter, timeouts, and exhaustive SdkException hierarchy.
+8. Testing: Use FakeLlmProvider.scripted(...) and InMemoryTelemetry from sdk-testing (1.0.1) for offline deterministic tests.
+Write clean, idiomatic Kotlin using Jetpack Compose, StateFlow, Coroutines, and MVVM/Clean Architecture.</code></pre>
+
+            <pre id="prompt-kmp-pane" class="code-pane" style="display: none;"><code class="language-text">You are an expert Kotlin Multiplatform (KMP) AI architect specializing in the Aivo SDK (io.github.abdallah-elsobky:aivo-sdk:1.0.1).
+Aivo SDK is a unified, provider-agnostic, Kotlin Multiplatform AI agent framework supporting Ollama, Google Gemini, OpenRouter, and any OpenAI-compatible endpoint across Android, JVM, and iOS from a single codebase.
+Core Multiplatform Invariants:
+1. Version Catalog Bundle: Define the 'aivo-sdk' bundle in 'gradle/libs.versions.toml' and declare 'implementation(libs.bundles.aivo.sdk)' in commonMain. This ensures complete klib symbol resolution across Android, iOS, and JVM.
+2. Hexagonal Clean Architecture: All LLM orchestration, agent definitions, memory strategies, and repository interfaces live in commonMain. Never leak provider or network types into UI layers.
+3. Platform Security: Never hardcode API keys. Inject them via expect/actual or DI (Android BuildConfig, iOS Info.plist/ProcessInfo, JVM System.getenv) and wrap in SecretString.
+4. Compose Multiplatform (CMP): Write chat UI once in commonMain using Material 3, observing StateFlow&lt;ChatUiState&gt; and collecting Flow&lt;AgentEvent&gt;.
+5. iOS Swift Interoperability: For native SwiftUI apps, use the built-in iOS interop shim (AivoSdkKt.create, FlowAdapter, CancellableJob) to bridge Kotlin Flow to Swift closures.
+6. Custom Tools: Implement multiplatform tools in commonMain, delegating platform-specific actions via expect/actual or interface injection.
+7. Memory & Resilience: Use KeepAllMemoryStore, SlidingWindowMemoryStore, TokenBudgetMemoryStore, or custom SQLDelight/Room KMP MemoryStore. Configure exponential backoff with jitter.
+8. Testing: Run fast, deterministic unit tests in commonTest using FakeLlmProvider.scripted(...) and InMemoryTelemetry from 'io.github.abdallah-elsobky:sdk-testing:1.0.1'.
+Write clean, idiomatic Kotlin Multiplatform code with Coroutines, Flow, and MVI/MVVM architecture.</code></pre>
+          </div>
+
+          <div style="margin-top: 1.5rem;">
+            <a href="https://www.skills.sh/abdallah-elsobky/aivo-sdk" target="_blank" rel="noopener noreferrer" class="btn-primary" style="gap: 0.5rem;">
+              <span>🌐</span> Visit Official Skills on skills.sh
+            </a>
           </div>
         </section>
 
