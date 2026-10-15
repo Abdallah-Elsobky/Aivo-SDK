@@ -1,0 +1,10 @@
+## local.properties (Place at root of Android project — automatically excluded by .gitignore)
+
+# Google Gemini API Key (Get free key from https://aistudio.google.com/app/apikey)
+GEMINI_API_KEY=AIzaSy...
+
+# Ollama API Key (Get key from https://ollama.com/settings/keys)
+OLLAMA_API_KEY=your_ollama_key_here
+
+# OpenRouter API Key (Get key from https://openrouter.ai/keys)
+OPENROUTER_API_KEY=sk-or-v1-...

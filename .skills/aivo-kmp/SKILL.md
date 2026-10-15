@@ -1,15 +1,12 @@
 ---
 name: aivo-kmp
 description: Complete architecture and production integration guide for Aivo SDK in Kotlin Multiplatform (KMP) and Compose Multiplatform (CMP) projects. Use when building cross-platform AI agents, streaming chat, multi-agent systems, and tool execution sharing code across Android, iOS, JVM (Desktop/Server), and Darwin targets.
-compatibility: Kotlin 2.0+, Kotlin Multiplatform, Targets: Android API 24+, iOS (Arm64, Simulator, X64), JVM 11+, Compose Multiplatform 1.7+
-metadata:
-  sdk-version: "1.0.1"
-  artifact: "io.github.abdallah-elsobky:aivo-sdk"
-  author: "Abdallah Elsobky"
-  license: "Apache-2.0"
 ---
 
 # 🌐 Aivo SDK for Kotlin Multiplatform (KMP) — Agent Skill
+
+> **Compatibility**: Kotlin 2.0+, Kotlin Multiplatform, Targets: Android API 24+, iOS (Arm64, Simulator, X64), JVM 11+, Compose Multiplatform 1.7+  
+> **Metadata**: SDK Version `1.0.1` | Artifact `io.github.abdallah-elsobky:aivo-sdk` | License Apache-2.0
 
 This skill teaches AI agents how to expertly design, implement, and maintain production-grade cross-platform agentic AI systems using the **Aivo SDK** (`io.github.abdallah-elsobky:aivo-sdk:1.0.1`) across **Android**, **iOS**, **JVM / Desktop**, and **Server**.
 
@@ -172,9 +169,9 @@ actual object PlatformSecretProvider {
 
 // iosMain
 import platform.Foundation.NSProcessInfo
-import platform.Foundation.NSBundle
+        import platform.Foundation.NSBundle
 
-actual object PlatformSecretProvider {
+        actual object PlatformSecretProvider {
     actual fun getApiKey(providerId: String): String {
         return NSProcessInfo.processInfo.environment[providerId.uppercase() + "_API_KEY"] as? String
             ?: NSBundle.mainBundle.objectForInfoDictionaryKey(providerId.uppercase() + "_API_KEY") as? String

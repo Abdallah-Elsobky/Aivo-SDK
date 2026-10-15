@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "aivo-android": {
+      "source": "Abdallah-Elsobky/Aivo-SDK",
+      "sourceType": "github",
+      "skillPath": ".skills/aivo-android/SKILL.md",
+      "computedHash": "928d785da28feadae52a7c3bd22dbc536ce87502ace2b95001517c254e5a4205"
+    }
+  }
+}

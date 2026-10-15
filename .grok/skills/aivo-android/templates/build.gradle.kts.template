@@ -1,0 +1,67 @@
+// Template for app/build.gradle.kts integrating Aivo SDK
+
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
+}
+
+android {
+    namespace = "com.example.aivoapp"
+    compileSdk = 35
+
+    defaultConfig {
+        applicationId = "com.example.aivoapp"
+        minSdk = 24
+        targetSdk = 35
+        versionCode = 1
+        versionName = "1.0.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Load API Keys from local.properties into BuildConfig
+        val localProperties = java.util.Properties().apply {
+            val file = rootProject.file("local.properties")
+            if (file.exists()) load(file.inputStream())
+        }
+
+        buildConfigField("String", "GEMINI_API_KEY", "\"${localProperties["GEMINI_API_KEY"] ?: ""}\"")
+        buildConfigField("String", "OLLAMA_API_KEY", "\"${localProperties["OLLAMA_API_KEY"] ?: ""}\"")
+        buildConfigField("String", "OPENROUTER_API_KEY", "\"${localProperties["OPENROUTER_API_KEY"] ?: ""}\"")
+    }
+
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
+
+dependencies {
+    // 🤖 Aivo SDK Core (Release 1.0.1) - AGP transitively resolves all submodules
+    implementation(libs.aivo.sdk) // Or: implementation("io.github.abdallah-elsobky:aivo-sdk:1.0.1")
+
+    // 🧪 Aivo SDK Testing Double Library
+    testImplementation(libs.aivo.sdk.testing) // Or: testImplementation("io.github.abdallah-elsobky:sdk-testing:1.0.1")
+
+    // AndroidX & Jetpack Compose
+    implementation(platform("androidx.compose:compose-bom:2024.12.01"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
+
+    // Coroutines & Testing
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
+    testImplementation("junit:junit:4.13.2")
+}

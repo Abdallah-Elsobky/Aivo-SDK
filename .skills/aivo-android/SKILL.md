@@ -1,15 +1,12 @@
 ---
 name: aivo-android
 description: Comprehensive guide and production implementation toolkit for integrating Aivo SDK in native Android applications. Use when building AI agents, streaming chat interfaces, tool-calling workflows, multi-agent teams, or Room-backed conversation memory in Android using Jetpack Compose, ViewModel, Coroutines, and Clean Architecture.
-compatibility: Android API 24+, Kotlin 2.0+, Jetpack Compose, Coroutines 1.8+
-metadata:
-  sdk-version: "1.0.1"
-  artifact: "io.github.abdallah-elsobky:aivo-sdk"
-  author: "Abdallah Elsobky"
-  license: "Apache-2.0"
 ---
 
 # 🤖 Aivo SDK for Android — Agent Skill
+
+> **Compatibility**: Android API 24+, Kotlin 2.0+, Jetpack Compose, Coroutines 1.8+  
+> **Metadata**: SDK Version `1.0.1` | Artifact `io.github.abdallah-elsobky:aivo-sdk` | License Apache-2.0
 
 This skill teaches AI agents how to expertly design, implement, and maintain production-ready agentic AI features in native Android applications using the **Aivo SDK** (`io.github.abdallah-elsobky:aivo-sdk:1.0.1`).
 
