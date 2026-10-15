@@ -1,70 +1,64 @@
 <div align="center">
 
 <a href="https://abdallah-elsobky.github.io/Aivo-SDK/" target="_blank" rel="noopener noreferrer">
-  <img src="docs/assets/img/aivo.jpg" alt="Aivo SDK Logo" width="140" style="border-radius: 28px; box-shadow: 0 8px 24px rgba(0,0,0,0.18);" />
+  <img src="docs/assets/img/aivo.jpg" alt="Aivo SDK Logo" width="130" style="border-radius: 26px; box-shadow: 0 8px 24px rgba(0,0,0,0.18);" />
 </a>
-
-<br/>
-<br/>
-
-<a href="https://abdallah-elsobky.github.io/Aivo-SDK/" target="_blank" rel="noopener noreferrer">
-  <img src="https://img.shields.io/badge/Interactive_Docs-Visit_Website-6C63FF?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Interactive Documentation"/>
-</a>
-<img src="https://img.shields.io/badge/Aivo_SDK-1.0.1-10B981?style=for-the-badge&logo=kotlin&logoColor=white" alt="Version"/>
 
 # 🤖 Aivo SDK
 
-### Production-grade · Provider-agnostic · Kotlin Multiplatform Agentic AI SDK
+### Production-Grade · Provider-Agnostic · Kotlin Multiplatform Agentic AI Framework
 
-Build and ship autonomous AI agents — with streaming, tool calling, multi-agent teams, and production guardrails — across Android, JVM, and iOS from a single codebase.
+Build and ship autonomous AI agents — with reactive streaming, type-safe tool calling, supervisor multi-agent teams, and production guardrails — across Android, iOS, and JVM from a single codebase.
 
 <br/>
 
-<a href="https://abdallah-elsobky.github.io/Aivo-SDK/" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Live_Docs-abdallah--elsobky.github.io%2FAivo--SDK-6C63FF?style=flat-square&logo=googlechrome&logoColor=white" alt="Live Docs"/></a>
-<a href="https://github.com/Abdallah-Elsobky/Test-Aivo-SDK" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Demo_App-KMP_Compose-FF6F00?style=flat-square&logo=github&logoColor=white" alt="KMP Demo App"/></a>
-<a href="https://www.skills.sh/abdallah-elsobky/aivo-sdk" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Agent_Skills-skills.sh-000000?style=flat-square&logo=openai&logoColor=white" alt="Agent Skills"/></a>
+[![Version](https://img.shields.io/badge/Aivo_SDK-1.0.1-10B981?style=for-the-badge&logo=kotlin&logoColor=white)](https://central.sonatype.com/artifact/io.github.abdallah-elsobky/aivo-sdk)
+[![Interactive Docs](https://img.shields.io/badge/Live_Docs-Visit_Portal-6C63FF?style=for-the-badge&logo=google-chrome&logoColor=white)](https://abdallah-elsobky.github.io/Aivo-SDK/)
+[![KMP Demo App](https://img.shields.io/badge/Demo_App-KMP_Compose-FF6F00?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Abdallah-Elsobky/Test-Aivo-SDK)
+[![Agent Skills](https://img.shields.io/badge/Agent_Skills-skills.sh-000000?style=for-the-badge&logo=openai&logoColor=white)](https://www.skills.sh/abdallah-elsobky/aivo-sdk)
+
+<br/>
+
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.abdallah-elsobky/aivo-sdk.svg?label=Maven%20Central&style=flat-square&color=6C63FF)](https://central.sonatype.com/artifact/io.github.abdallah-elsobky/aivo-sdk)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](LICENSE)
-[![Kotlin](https://img.shields.io/badge/Kotlin-Multiplatform-orange?style=flat-square&logo=kotlin)](https://kotlinlang.org/docs/multiplatform.html)
-[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20JVM%20%7C%20iOS-green?style=flat-square)](https://kotlinlang.org/docs/multiplatform.html)
-[![API](https://img.shields.io/badge/Android-API%2024%2B-brightgreen?style=flat-square&logo=android)](https://developer.android.com/)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.0%2B-orange?style=flat-square&logo=kotlin)](https://kotlinlang.org/docs/multiplatform.html)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20JVM-green?style=flat-square)](https://kotlinlang.org/docs/multiplatform.html)
+[![Android API](https://img.shields.io/badge/Android-API%2024%2B-brightgreen?style=flat-square&logo=android)](https://developer.android.com/)
 
 <br/>
 
-<a href="https://abdallah-elsobky.github.io/Aivo-SDK/" target="_blank" rel="noopener noreferrer"><strong>🌐 Interactive Docs & Configurator</strong></a> · [**📱 KMP Demo App**](#-production-kmp-demo-app) · [**🧠 Agent Skills**](#-agent-skills--ai-assisted-development) · [**⚡ Quick Start**](#-quick-start) · [**🔌 Providers**](#-providers) · [**🤖 Agents**](#-agents) · [**🛠️ Tools**](#%EF%B8%8F-tool-calling) · [**🌊 Streaming**](#-streaming) · [**📁 Samples**](#-samples)
+[**🌐 Live Portal**](https://abdallah-elsobky.github.io/Aivo-SDK/) • [**📱 KMP Demo App**](#-production-kmp-demo-app) • [**🧠 Agent Skills**](#-agent-skills--ai-assisted-development) • [**📦 Installation**](#-installation) • [**⚡ Quick Start**](#-quick-start) • [**🔌 Providers**](#-providers) • [**📁 Samples**](#-samples)
 
 </div>
 
 ---
 
-> ### 🌐 Interactive Web Documentation & Live Playground
-> Explore the full developer and contributor guide, live interactive code configurator, IDE-styled syntax highlighting, and visual architecture flowcharts at:
-> 👉 **<a href="https://abdallah-elsobky.github.io/Aivo-SDK/" target="_blank" rel="noopener noreferrer">https://abdallah-elsobky.github.io/Aivo-SDK/</a>** *(opens in a new tab)*
->
-> ---
->
-> ### 📱 Real-World KMP Demo Application
-> See Aivo SDK in action in a complete, cross-platform production app built with Kotlin Multiplatform (KMP) and Compose Multiplatform:
-> 👉 **[Abdallah-Elsobky/Test-Aivo-SDK](https://github.com/Abdallah-Elsobky/Test-Aivo-SDK)** — *Real-time streaming, dynamic tool execution, multi-provider switching, and Jetpack / Compose Multiplatform UI across Android & iOS.*
->
-> ---
->
-> ### 🧠 Supercharge Your AI Coding Agent (Cursor, Claude, Copilot, Antigravity)
-> Use verified agent skills to accelerate development and eliminate API hallucination:
-> 👉 **[abdallah-elsobky/aivo-sdk on skills.sh](https://www.skills.sh/abdallah-elsobky/aivo-sdk)** — *Includes dedicated `aivo-android` and `aivo-kmp` skills.*
+### 🌟 Featured Highlights
+
+| 🌐 [**Interactive Web Portal**](https://abdallah-elsobky.github.io/Aivo-SDK/) | 📱 [**Real-World KMP Demo App**](https://github.com/Abdallah-Elsobky/Test-Aivo-SDK) | 🧠 [**Agent Skills (skills.sh)**](https://www.skills.sh/abdallah-elsobky/aivo-sdk) |
+| :--- | :--- | :--- |
+| Live code configurator, IDE syntax highlighting, and architectural sequence diagrams. | Full Compose Multiplatform showcase with real-time streaming, chained tools, and MVI UI. | Official domain playbooks for Cursor, Claude Code, GitHub Copilot, and Antigravity. |
 
 ---
 
-## 📖 Table of Contents
+### ⚡ Quick Navigation
 
-- [🌐 Interactive Documentation Website (Live Portal)](https://abdallah-elsobky.github.io/Aivo-SDK/)
-- [📱 Production KMP Demo App](#-production-kmp-demo-app)
-- [🧠 Agent Skills & AI-Assisted Development](#-agent-skills--ai-assisted-development)
+| 🚀 **Get Started** | 🧠 **Core Agent Engine** | 🛡️ **Production & Ecosystem** |
+| :--- | :--- | :--- |
+| • [**📦 Installation & Setup**](#-installation)<br/>• [**🔑 API Key Security**](#-storing-api-keys-securely)<br/>• [**⚡ Quick Start (3 Levels)**](#-quick-start)<br/>• [**🏗️ Architecture & Modules**](#-architecture) | • [**🔌 Providers & Models**](#-providers)<br/>• [**🤖 Defining Single Agents**](#-agents)<br/>• [**🛠️ Custom Tool Calling**](#%EF%B8%8F-tool-calling)<br/>• [**👥 Multi-Agent Teams**](#-multi-agent-teams) | • [**📱 KMP Demo App**](#-production-kmp-demo-app)<br/>• [**🧠 Official Agent Skills**](#-agent-skills--ai-assisted-development)<br/>• [**🌊 Flow Streaming**](#-streaming)<br/>• [**📁 Samples & Testing**](#-samples) |
+
+<details>
+<summary><strong>🔍 Full Detailed Topic Index (Click to expand)</strong></summary>
+
+<br/>
+
+- [Why Aivo SDK?](#-why-aivo-sdk)
+- [Features at a Glance](#-features-at-a-glance)
+- [Production KMP Demo App](#-production-kmp-demo-app)
+- [Agent Skills & AI-Assisted Development](#-agent-skills--ai-assisted-development)
   - [What are Agent Skills?](#what-are-agent-skills)
   - [Available Skills (`aivo-android` & `aivo-kmp`)](#available-skills)
   - [How to Install & Use the Skills](#how-to-install--use-the-skills)
-- [Why Aivo SDK?](#-why-aivo-sdk)
-- [Features at a Glance](#-features-at-a-glance)
 - [Architecture](#-architecture)
 - [Installation](#-installation)
   - [Android (pure Android project)](#android-pure-android-project)
@@ -74,34 +68,25 @@ Build and ship autonomous AI agents — with streaming, tool calling, multi-agen
   - [OpenRouter](#openrouter-free-models-available)
   - [Ollama (cloud — API key required)](#ollama-cloud--api-key-required)
 - [Storing API Keys Securely](#-storing-api-keys-securely)
-  - [Android — local.properties → BuildConfig](#android--localproperties--buildconfig)
-  - [JVM / Server — Environment Variables](#jvm--server--environment-variables)
-  - [KMP Shared Module](#kmp-shared-module)
 - [Quick Start](#-quick-start)
   - [Option A — One-Line Setup (Type-Safe Models)](#option-a--one-line-setup-fastest)
   - [Option B — Full Builder DSL](#option-b--full-builder-dsl-recommended-for-production)
   - [Option C — Raw LLM Client](#option-c--raw-llm-client-no-agent-loop)
   - [Typed Catalogs vs. Custom Models & Endpoints](#-typed-catalogs-vs-custom-models--endpoints)
-- [Providers](#-providers)
-  - [Ollama (Default)](#ollama-default)
-  - [Google Gemini](#google-gemini)
-  - [OpenRouter](#openrouter)
-  - [OpenAI-Compatible & Custom Endpoints](#openai-compatible-any-custom-endpoint)
-- [Agents](#-agents)
-  - [Kotlin DSL](#kotlin-dsl)
-  - [Markdown Frontmatter](#markdown-frontmatter)
-  - [JSON Definition](#json-definition)
-- [Tool Calling](#%EF%B8%8F-tool-calling)
-- [Multi-Agent Teams](#-multi-agent-teams)
-- [Streaming](#-streaming)
-- [Memory & Context](#-memory--context)
-- [Resilience & Guardrails](#-resilience--guardrails)
-- [Observability](#-observability)
+- [Providers (Ollama, Gemini, OpenRouter, Custom Endpoints)](#-providers)
+- [Agents (Kotlin DSL, Markdown Frontmatter, JSON)](#-agents)
+- [Tool Calling & Human-in-the-Loop](#%EF%B8%8F-tool-calling)
+- [Multi-Agent Teams & Supervisor Pattern](#-multi-agent-teams)
+- [Streaming & Flow](#-streaming)
+- [Memory & Context Management](#-memory--context)
+- [Resilience & Production Guardrails](#-resilience--guardrails)
+- [Observability & Telemetry](#-observability)
 - [Error Handling](#-error-handling)
-- [Testing](#-testing)
+- [Offline Unit Testing](#-testing)
 - [Samples](#-samples)
-- [Contributing](#-contributing)
-- [License](#-license)
+- [Contributing & License](#-contributing)
+
+</details>
 
 ---
 
